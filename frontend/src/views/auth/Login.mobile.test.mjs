@@ -3,17 +3,23 @@ import { readFileSync } from 'node:fs'
 import test from 'node:test'
 
 const source = readFileSync(new URL('./Login.vue', import.meta.url), 'utf8')
-const tabletStyles = source.slice(
-  source.indexOf('@media (max-width: 768px)'),
+const stackStyles = source.slice(
+  source.indexOf('@media (max-width: 1000px)'),
   source.indexOf('@media (max-width: 480px)'),
 )
 const phoneStyles = source.slice(source.indexOf('@media (max-width: 480px)'))
 
-test('phone login puts the form before the showcase and reserves room for the header', () => {
-  assert.match(tabletStyles, /\.login-layout\s*\{[\s\S]*?flex-direction:\s*column;[\s\S]*?padding-top:\s*64px;/)
-  assert.match(tabletStyles, /\.form-section\s*\{[\s\S]*?order:\s*-1;/)
+test('narrow login stacks the stage so the form column comes before the product sheet', () => {
+  // 桌面端 stage 用 row-reverse（表单居右）；窄屏改 column 后，
+  // DOM 顺序（表单在前）自然把表单排到产品切片上方，无需 order 补丁。
+  assert.match(stackStyles, /\.stage\s*\{[\s\S]*?flex-direction:\s*column;/)
+  const desktopStage = source.slice(
+    source.indexOf('.stage {'),
+    source.indexOf('@media'),
+  )
+  assert.match(desktopStage, /flex-direction:\s*row-reverse;/)
 })
 
-test('narrow login headers use icon-only links to avoid overlapping the logo', () => {
-  assert.match(phoneStyles, /\.header-links\s*\{[\s\S]*?\.link-text\s*\{\s*display:\s*none;/)
+test('phone login keeps the language switch compact and clear of the form', () => {
+  assert.match(phoneStyles, /\.lang-switch\s*\{[\s\S]*?top:\s*14px;/)
 })

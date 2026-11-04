@@ -63,8 +63,9 @@ const MONO_KEY = 'font_mono'
 const SIZE_KEY = 'font_size'
 
 export const SANS_STACKS: Record<FontKey, string> = {
+  // Askademic: 自托管的 Instrument Sans 置于系统栈头部(latin),中文仍走 PingFang/雅黑
   system:
-    '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif',
+    '"Instrument Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif',
   // Mac
   pingfang:
     '"PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", -apple-system, BlinkMacSystemFont, sans-serif',

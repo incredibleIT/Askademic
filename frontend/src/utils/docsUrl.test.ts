@@ -40,7 +40,8 @@ test('every linked doc page and anchor exists in website-docs', () => {
   }
 })
 
-test('docsUrl points at the public docs site', () => {
-  assert.equal(docsUrl('home'), 'https://weknora.weixin.qq.com/docs/')
-  assert.equal(docsUrl('models'), 'https://weknora.weixin.qq.com/docs/03-features/06-models')
+test('docsUrl points at the same-origin docs deployment', () => {
+  // 脱敏改造：文档站不再指向 WeKnora 官方域名，而是同源 /docs/（website-docs 自部署）
+  assert.equal(docsUrl('home'), '/docs/')
+  assert.equal(docsUrl('models'), '/docs/03-features/06-models')
 })

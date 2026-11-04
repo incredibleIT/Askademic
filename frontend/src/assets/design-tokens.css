@@ -1,0 +1,97 @@
+/**
+ * Askademic 设计令牌 —— editorial-greeting 方向(design-taste-frontend deal, seed 522964766)
+ *
+ * 这一文件是原型(.taste-skill/app/app.css)与 WeKnora/TDesign 现有主题之间的桥:
+ *   1. 自托管 Instrument Sans/Serif(离线部署可用;仅 latin 子集,中文回落 PingFang/Songti);
+ *   2. 声明原型令牌(--ad-*)作为新组件(login、外壳、首页)的取值来源;
+ *   3. 把令牌映射到 TDesign 的全局变量,让既有组件(按钮、输入框、弹层)整体换肤。
+ * 深色模式暂沿用原主题,只映射浅色;暗色适配在后续阶段补。
+ */
+
+/* ---------- 自托管字体 ---------- */
+@font-face {
+  font-family: "Instrument Sans";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url("./fonts/InstrumentSans-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Instrument Serif";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("./fonts/InstrumentSerif-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* 选择器与 theme.css 同级（:root:root 与 :root:root[theme-mode=…]），
+   且本文件在 theme.css 之后加载 —— 后者赢，令牌才能压过旧品牌色。 */
+:root:root,
+:root:root[theme-mode="light"] {
+  /* ---------- 原型令牌(新组件直接引用) ---------- */
+  --ad-ground: #ffffff;
+  --ad-surface: #f9f9f9;
+  --ad-raised: #ffffff;
+  --ad-border: #eaeaea;
+  --ad-rule: #f3f3f3;
+  --ad-control: #d9d9d6;
+  --ad-text: #1f201d;
+  --ad-muted: #636361;
+  --ad-faint: #6b6b6b;
+  --ad-accent: #1b6e66;            /* 深青:强调色,预算 <2% */
+  --ad-primary: #1d1f20;           /* 主按钮:近黑 */
+  --ad-primary-hover: #3a3c3d;
+  --ad-primary-active: #4a4c4d;
+  --ad-radius-card: 22px;
+  --ad-radius-control: 999px;
+  --ad-font: "Instrument Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --ad-font-serif: "Instrument Serif", "Songti SC", "SimSun", Georgia, serif;
+
+  /* ---------- 应用级字体与圆角(原 theme.css 变量,重定义取值) ---------- */
+  --app-font-family: var(--ad-font);
+  --app-font-family-serif: var(--ad-font-serif);
+  --app-radius-xl: 22px;
+
+  /* ---------- TDesign 品牌色:绿 → 深青 ---------- */
+  --td-brand-color-1: #e9f2f1;
+  --td-brand-color-2: #cde3e0;
+  --td-brand-color-3: #248076;
+  --td-brand-color-4: #1b6e66;
+  --td-brand-color-5: #166059;
+  --td-brand-color-6: #12524c;
+  --td-brand-color-7: #0e443f;
+  --td-brand-color-8: #0b3733;
+  --td-brand-color-9: #082a27;
+  --td-brand-color-10: #061e1c;
+  --td-brand-color: var(--td-brand-color-4);
+  --td-brand-color-light: var(--td-brand-color-1);
+  --td-brand-color-focus: color-mix(in srgb, var(--td-brand-color) 20%, transparent);
+  --td-brand-color-hover: var(--td-brand-color-3);
+  --td-brand-color-active: var(--td-brand-color-5);
+  --td-brand-color-disabled: #a8c5c2;
+
+  /* 主按钮:近黑(editorial-greeting:primary button is near-black) */
+  --td-button-primary-bg-color: var(--ad-primary);
+  --td-button-primary-bg-color-hover: var(--ad-primary-hover);
+  --td-button-primary-bg-color-active: var(--ad-primary-active);
+  --td-button-primary-bg-color-disabled: #c2c4c5;
+  --td-button-primary-border-color: var(--ad-primary);
+  --td-button-primary-border-color-hover: var(--ad-primary-hover);
+  --td-button-primary-border-color-active: var(--ad-primary-active);
+  --td-button-primary-text-color: #ffffff;
+  --td-button-primary-text-color-hover: #ffffff;
+  --td-button-primary-text-color-active: #ffffff;
+  --td-button-primary-text-color-disabled: #ffffff;
+}
+
+/* 暗色模式下主按钮反转（原主题即白底黑字，保持）；选择器同样对齐 theme.css 的暗色块 */
+:root:root[theme-mode="dark"] {
+  --td-button-primary-bg-color: #ffffff;
+  --td-button-primary-bg-color-hover: #e0e0e0;
+  --td-button-primary-bg-color-active: #c9c9c9;
+  --td-button-primary-border-color: #ffffff;
+  --td-button-primary-text-color: #000000;
+}

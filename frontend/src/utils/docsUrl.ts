@@ -1,5 +1,7 @@
-/** Public deployment of website-docs (VitePress, base `/docs/`). */
-export const DOCS_BASE_URL = 'https://weknora.weixin.qq.com/docs/'
+/** Public deployment of website-docs (VitePress, base `/docs/`).
+ *  脱敏改造：指向同源相对路径（website-docs 可自行部署在同一域名的 /docs/ 下），
+ *  不再指向 WeKnora 官方文档站。 */
+export const DOCS_BASE_URL = '/docs/'
 
 /**
  * Doc pages linked from the UI, as website-docs paths without the `.md`

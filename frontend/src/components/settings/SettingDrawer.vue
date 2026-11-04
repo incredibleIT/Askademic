@@ -7,7 +7,7 @@
       <div class="setting-drawer-resize-line" />
     </div>
   </teleport>
-  <t-drawer v-model:visible="drawerVisible" v-bind="drawerPassthroughAttrs" :size="effectiveWidth" :z-index="zIndex" placement="right"
+  <t-drawer v-if="everOpened" v-model:visible="drawerVisible" v-bind="drawerPassthroughAttrs" :size="effectiveWidth" :z-index="zIndex" placement="right"
     attach="body" destroy-on-close :footer="!hideFooter"
     :class="drawerClass" @before-close="blurActiveElementBeforeClose">
     <!--
@@ -171,6 +171,13 @@ const drawerVisible = computed({
   get: () => props.visible,
   set: (val) => emit('update:visible', val)
 })
+
+// 首次打开前不渲染 t-drawer：TDesign 关闭态的抽屉会在 body 上留一层
+// opacity:0 的全屏遮罩（.t-drawer__mask，背景 rgba(0,0,0,.6)），命中
+// 测试（elementFromPoint，检查器会强制开启 pointer-events）会把页面
+// 上所有大字判成被遮盖。懒渲染后，未用过的抽屉不留任何 DOM。
+const everOpened = ref(props.visible)
+watch(drawerVisible, (v) => { if (v) everOpened.value = true })
 
 // ---------- width state ----------
 // Storage key derives from the drawer title so different drawers (model

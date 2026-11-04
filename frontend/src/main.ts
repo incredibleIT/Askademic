@@ -6,6 +6,8 @@ import TDesign from "tdesign-vue-next";
 // 引入组件库的少量全局样式变量
 import "tdesign-vue-next/dist/tdesign.css";
 import "@/assets/theme/theme.css";
+// Askademic 设计令牌(editorial-greeting):在 theme.css 之后、overrides 之前加载
+import "@/assets/design-tokens.css";
 import "@/assets/theme/tdesign-overrides.less";
 import "@/assets/dropdown-menu.less";
 import "@/components/css/chat-hljs-dark.less";

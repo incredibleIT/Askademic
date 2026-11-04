@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Askademic 问 mark：深青圆角方块 + 衬线白字 -->
+  <rect x="2" y="2" width="60" height="60" rx="16" fill="#1b6e66"/>
+  <text x="32" y="45" text-anchor="middle" fill="#ffffff"
+        font-family="Songti SC, SimSun, Noto Serif SC, serif" font-size="36" font-weight="500">问</text>
+</svg>
