@@ -3,7 +3,7 @@
         <!-- 展开时：Logo + 搜索/折叠按钮同行 -->
         <div class="logo_row" v-if="!uiStore.sidebarCollapsed">
             <!-- Askademic 品牌字标（脱敏：替换 weknora.png，来源 brand.ts 单一事实源） -->
-            <div class="logo_box" @click="router.push('/platform/knowledge-bases')" style="cursor: pointer;">
+            <div class="logo_box" @click="router.push('/platform/home')" style="cursor: pointer;">
                 <span class="brand-mark" aria-hidden="true">问</span>
                 <span v-if="!uiStore.sidebarCollapsed" class="brand-word">Askademic</span>
                 <sup v-if="isLiteEdition" class="lite-badge">Lite</sup>
@@ -88,41 +88,47 @@
                         :label="assistantName" :active="assistantStore.visible" @click="assistantStore.toggle()" />
                 </t-tooltip>
             </div>
-            <div class="menu_box" :class="{ 'menu_box--sticky': item.children && !uiStore.sidebarCollapsed }"
-                v-for="(item, index) in topMenuItems" :key="index">
-                <t-tooltip :content="item.title" placement="right" :disabled="!uiStore.sidebarCollapsed">
-                    <div @click="handleMenuClick(item.path)" @mouseenter="mouseenteMenu(item.path)"
-                        @mouseleave="mouseleaveMenu(item.path)" :data-guide="`nav-${item.path}`"
-                        :class="['menu_item', item.childrenPath && item.childrenPath == currentpath ? 'menu_item_c_active' : isMenuItemActive(item.path) ? 'menu_item_active' : '']">
-                        <div class="menu_item-box">
-                            <div class="menu_icon" :class="`menu_icon--${item.icon}`">
-                                <img class="icon"
-                                    :src="getImgSrc(item.icon == 'zhishiku' ? knowledgeIcon : item.icon == 'agent' ? agentIcon : item.icon == 'artifact' ? artifactIcon : item.icon == 'automation' ? automationIcon : item.icon == 'toolbox' ? toolboxIcon : item.icon == 'organization' ? organizationIcon : item.icon == 'logout' ? logoutIcon : item.icon == 'setting' ? settingIcon : prefixIcon)"
-                                    alt="">
-                            </div>
-                            <template v-if="!uiStore.sidebarCollapsed">
-                                <span class="menu_title" :title="item.title">{{ item.title }}</span>
-                                <span v-if="item.path === 'organizations' && orgStore.totalPendingJoinRequestCount > 0"
-                                    class="menu-pending-badge"
-                                    :title="t('organization.settings.pendingJoinRequestsBadge')">{{
-                                        orgStore.totalPendingJoinRequestCount }}</span>
-                                <span v-if="item.path === 'toolbox' && toolboxPreview.length" class="menu-toolbox-stack"
-                                    :title="toolboxPreview.map((tool) => tool.key === 'browserconnection' && browserStackStatus
-                                        ? `${t(tool.title)} (${t(`localBrowser.${browserStackStatus}`)})` : t(tool.title)).join(' · ')">
-                                    <span v-for="tool in toolboxPreview" :key="tool.key" class="menu-toolbox-stack__item">
-                                        <template v-if="tool.key === 'browserconnection'">
-                                            <BrowserIcon width="12" height="12" />
-                                            <i v-if="browserStackStatus" class="menu-toolbox-stack__status"
-                                                :class="`is-${browserStackStatus}`" aria-hidden="true" />
-                                        </template>
-                                        <t-icon v-else :name="tool.icon" size="12px" />
+            <!-- 分组导航(编辑式问候外壳):对话 / 知识 / 工具。项与过滤逻辑仍来自
+                 menuStore 的 visibleMenuArr;图标为 16px 线性 SVG,描边继承文字色 -->
+            <template v-for="group in navGroups" :key="group.key">
+                <div v-if="!uiStore.sidebarCollapsed" class="nav-group-label">{{ group.label }}</div>
+                <div class="menu_box" :class="{ 'menu_box--sticky': item.children && !uiStore.sidebarCollapsed }"
+                    v-for="item in group.items" :key="item.path">
+                    <t-tooltip :content="item.title" placement="right" :disabled="!uiStore.sidebarCollapsed">
+                        <div @click="handleMenuClick(item.path)" @mouseenter="mouseenteMenu(item.path)"
+                            @mouseleave="mouseleaveMenu(item.path)" :data-guide="`nav-${item.path}`"
+                            :class="['menu_item', item.childrenPath && item.childrenPath == currentpath ? 'menu_item_c_active' : isMenuItemActive(item.path) ? 'menu_item_active' : '']">
+                            <div class="menu_item-box">
+                                <div class="menu_icon">
+                                    <svg class="nav-svg" viewBox="0 0 24 24" aria-hidden="true">
+                                        <path v-for="(d, di) in navIconPaths(item.path)" :key="di" :d="d"
+                                            stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                </div>
+                                <template v-if="!uiStore.sidebarCollapsed">
+                                    <span class="menu_title" :title="item.title">{{ item.title }}</span>
+                                    <span v-if="item.path === 'organizations' && orgStore.totalPendingJoinRequestCount > 0"
+                                        class="menu-pending-badge"
+                                        :title="t('organization.settings.pendingJoinRequestsBadge')">{{
+                                            orgStore.totalPendingJoinRequestCount }}</span>
+                                    <span v-if="item.path === 'toolbox' && toolboxPreview.length" class="menu-toolbox-stack"
+                                        :title="toolboxPreview.map((tool) => tool.key === 'browserconnection' && browserStackStatus
+                                            ? `${t(tool.title)} (${t(`localBrowser.${browserStackStatus}`)})` : t(tool.title)).join(' · ')">
+                                        <span v-for="tool in toolboxPreview" :key="tool.key" class="menu-toolbox-stack__item">
+                                            <template v-if="tool.key === 'browserconnection'">
+                                                <BrowserIcon width="12" height="12" />
+                                                <i v-if="browserStackStatus" class="menu-toolbox-stack__status"
+                                                    :class="`is-${browserStackStatus}`" aria-hidden="true" />
+                                            </template>
+                                            <t-icon v-else :name="tool.icon" size="12px" />
+                                        </span>
                                     </span>
-                                </span>
-                            </template>
+                                </template>
+                            </div>
                         </div>
-                    </div>
-                </t-tooltip>
-            </div>
+                    </t-tooltip>
+                </div>
+            </template>
 
             <!-- 历史会话：按来源筛选后统一按日期分组展示 -->
             <div class="submenu" v-if="!uiStore.sidebarCollapsed">
@@ -478,28 +484,47 @@ const isMenuItemActive = (itemPath: string): boolean => {
     }
 };
 
-// 统一的图标激活状态判断
-const getIconActiveState = (itemPath: string) => {
-    const currentRoute = route.name;
-
-    return {
-        isKbActive: itemPath === 'knowledge-bases' && (
-            currentRoute === 'knowledgeBaseList' ||
-            currentRoute === 'knowledgeBaseDetail' ||
-            currentRoute === 'knowledgeBaseSettings'
-        ),
-        isCreatChatActive: itemPath === 'creatChat' && (currentRoute === 'kbCreatChat' || currentRoute === 'globalCreatChat'),
-        isSettingsActive: itemPath === 'settings' && currentRoute === 'settings',
-        isChatActive: itemPath === 'chat' && currentRoute === 'chat'
-    };
-};
-
 // 分离上下两部分菜单（使用 visibleMenuArr 以便 lite 模式过滤 logout）
 const TOP_MENU_PATHS = new Set(['creatChat', 'knowledge-bases', 'artifacts', 'agents', 'automations', 'toolbox', 'organizations']);
 
 const topMenuItems = computed<MenuItem[]>(() => {
     return (visibleMenuArr.value as unknown as MenuItem[]).filter((item: MenuItem) => TOP_MENU_PATHS.has(item.path));
 });
+
+// 侧栏导航分组(编辑式问候外壳:对话 / 知识 / 工具)。项本身仍来自 menuStore 的
+// visibleMenuArr,lite/能力/角色过滤保持不变;组内按 paths 顺序渲染,空组不显示。
+const NAV_GROUP_DEFS: Array<{ key: string; labelKey: string; paths: string[] }> = [
+    { key: 'chat', labelKey: 'menu.groupChat', paths: ['creatChat'] },
+    { key: 'knowledge', labelKey: 'menu.groupKnowledge', paths: ['knowledge-bases', 'agents', 'artifacts'] },
+    { key: 'tools', labelKey: 'menu.groupTools', paths: ['toolbox', 'automations', 'organizations'] },
+];
+
+const navGroups = computed(() => {
+    const items = topMenuItems.value;
+    return NAV_GROUP_DEFS
+        .map((group) => ({
+            key: group.key,
+            label: t(group.labelKey),
+            items: group.paths
+                .map((path) => items.find((item) => item.path === path))
+                .filter((item): item is MenuItem => !!item),
+        }))
+        .filter((group) => group.items.length > 0);
+});
+
+// 导航图标:与原型一致的 16px 线性 SVG(viewBox 24,stroke 继承文字色)。
+// 激活态靠底色 + 500 字重表达,不再换彩色图标(强调色预算 <2%)。
+const NAV_ICON_PATHS: Record<string, string[]> = {
+    creatChat: ['M21 12a8 8 0 0 1-8 8H5l-2 2V12a8 8 0 0 1 8-8h2a8 8 0 0 1 8 8z'],
+    'knowledge-bases': ['M4 19V5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2zm0 0a2 2 0 0 0 2 2h13'],
+    agents: ['M12 3l2 5 5 .5-4 3.5 1.5 5L12 14l-4.5 3 1.5-5-4-3.5L10 8z'],
+    artifacts: ['M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z', 'M14 3v6h6'],
+    toolbox: ['M14.7 6.3a4.5 4.5 0 0 0-6 6L3 18l3 3 5.7-5.7a4.5 4.5 0 0 0 6-6L14 13l-3-3z'],
+    automations: ['M13 2L3 14h7l-1 8 10-12h-7l1-8z'],
+    organizations: ['M12 3l9 4.5v9L12 21 3 16.5v-9z', 'M12 12l9-4.5M12 12v9M12 12L3 7.5'],
+};
+
+const navIconPaths = (path: string): string[] => NAV_ICON_PATHS[path] || [];
 
 const bottomMenuItems = computed<MenuItem[]>(() => {
     return (visibleMenuArr.value as unknown as MenuItem[]).filter((item: MenuItem) => !TOP_MENU_PATHS.has(item.path));
@@ -1125,58 +1150,12 @@ watch([() => route.name, () => route.params], (newvalue, oldvalue) => {
         void syncActiveBucketFromChat(newChatId);
     }
 
-    // 路由变化时更新图标状态和知识库信息（不涉及对话列表）
-    getIcon(nameStr);
-
+    // 路由变化时更新知识库信息（不涉及对话列表）
     // 如果切换了知识库，更新知识库名称但不重新加载对话列表
     if (newvalue[1].kbId !== oldvalue?.[1]?.kbId) {
         loadCurrentKbInfo((newvalue[1] as any)?.kbId as string);
     }
 });
-let knowledgeIcon = ref('zhishiku-green.svg');
-let prefixIcon = ref('prefixIcon.svg');
-let logoutIcon = ref('logout.svg');
-let settingIcon = ref('setting.svg');
-let agentIcon = ref('agent.svg');
-let artifactIcon = ref('artifact.svg');
-let toolboxIcon = ref('toolbox.svg');
-let automationIcon = ref('automation.svg');
-let organizationIcon = ref('organization.svg');
-let pathPrefix = ref(route.name)
-const getIcon = (path: string) => {
-    // 根据当前路由状态更新所有图标
-    const kbActiveState = getIconActiveState('knowledge-bases');
-    const creatChatActiveState = getIconActiveState('creatChat');
-    const settingsActiveState = getIconActiveState('settings');
-    const agentsActiveState = route.name === 'agentList';
-    const artifactsActiveState = route.name === 'artifactLibrary';
-    const organizationsActiveState = route.name === 'organizationList';
-
-    // 知识库图标：只在知识库页面显示绿色
-    knowledgeIcon.value = kbActiveState.isKbActive ? 'zhishiku-green.svg' : 'zhishiku.svg';
-
-    // 智能体图标：只在智能体页面显示绿色
-    agentIcon.value = agentsActiveState ? 'agent-green.svg' : 'agent.svg';
-
-    // 产物图标：只在产物页面显示绿色
-    artifactIcon.value = artifactsActiveState ? 'artifact-green.svg' : 'artifact.svg';
-
-    toolboxIcon.value = route.name === 'toolbox' ? 'toolbox-green.svg' : 'toolbox.svg';
-    automationIcon.value = route.name === 'automationList' ? 'automation-green.svg' : 'automation.svg';
-
-    // 组织图标：只在组织页面显示绿色
-    organizationIcon.value = organizationsActiveState ? 'organization-green.svg' : 'organization.svg';
-
-    // 对话图标：只在对话创建页面显示绿色，其他情况显示默认
-    prefixIcon.value = creatChatActiveState.isCreatChatActive ? 'prefixIcon-green.svg' : 'prefixIcon.svg';
-
-    // 设置图标：只在设置页面显示绿色
-    settingIcon.value = settingsActiveState.isSettingsActive ? 'setting-green.svg' : 'setting.svg';
-
-    // 退出图标：始终显示默认
-    logoutIcon.value = 'logout.svg';
-}
-getIcon(typeof route.name === 'string' ? route.name as string : (route.name ? String(route.name) : ''))
 const handleMenuClick = async (path: string) => {
     if (path === 'knowledge-bases') {
         // 知识库菜单项：如果在知识库内部，跳转到当前知识库文件页；否则跳转到知识库列表
@@ -1214,7 +1193,6 @@ const getCurrentKbId = async (): Promise<string | null> => {
 }
 
 const gotopage = async (path: string) => {
-    pathPrefix.value = path;
     // 处理退出登录
     if (path === 'logout') {
         try {
@@ -1242,7 +1220,6 @@ const gotopage = async (path: string) => {
             router.push(`/platform/${path}`);
         }
     }
-    getIcon(path)
 }
 
 const getImgSrc = (url: string) => {
@@ -1284,7 +1261,7 @@ const resizeSidebar = (delta: number, keyboard: boolean) => {
     width: var(--sidebar-width, 260px);
     flex-shrink: 0;
     padding: 8px 4px 6px;
-    background: var(--td-bg-color-sidebar);
+    background: var(--ad-ground);
     box-sizing: border-box;
     /* Avoid 100vh because <html> carries a `zoom` multiplier for font-size
        control; 100vh is evaluated against the unscaled viewport and then
@@ -1294,8 +1271,7 @@ const resizeSidebar = (delta: number, keyboard: boolean) => {
     overflow: visible;
     display: flex;
     flex-direction: column;
-    border-right: 1px solid var(--td-component-stroke);
-    box-shadow: 1px 0 0 rgba(0, 0, 0, 0.02);
+    border-right: 1px solid var(--ad-border);
     transition: width 0.25s ease, min-width 0.25s ease;
     position: relative;
 
@@ -1480,7 +1456,7 @@ const resizeSidebar = (delta: number, keyboard: boolean) => {
             position: sticky;
             top: 0;
             z-index: 2;
-            background: var(--td-bg-color-sidebar);
+            background: var(--ad-ground);
         }
     }
 
@@ -1491,11 +1467,15 @@ const resizeSidebar = (delta: number, keyboard: boolean) => {
 
     .menu_item_active {
         border-radius: var(--app-radius-xs);
-        background: var(--td-bg-color-secondarycontainer) !important;
+        background: var(--ad-active) !important;
 
         .menu_icon,
         .menu_title {
-            color: var(--td-brand-color) !important;
+            color: var(--ad-text) !important;
+        }
+
+        .menu_title {
+            font-weight: 500;
         }
     }
 
@@ -1503,7 +1483,7 @@ const resizeSidebar = (delta: number, keyboard: boolean) => {
 
         .menu_icon,
         .menu_title {
-            color: var(--td-text-color-primary);
+            color: var(--ad-text);
         }
     }
 
@@ -1526,13 +1506,25 @@ const resizeSidebar = (delta: number, keyboard: boolean) => {
 
         &:hover {
             border-radius: var(--app-radius-xs);
-            background: var(--td-bg-color-container-hover);
+            background: var(--ad-surface);
 
             .menu_icon,
             .menu_title {
-                color: var(--td-text-color-primary);
+                color: var(--ad-text);
             }
         }
+    }
+
+    // 导航分组标签(对话 / 知识 / 工具):12px 灰,仅展开态渲染
+    .nav-group-label {
+        font-family: var(--app-font-family);
+        font-size: 12px;
+        font-weight: 400;
+        line-height: 1;
+        color: var(--ad-muted);
+        padding: 0 8px;
+        margin: 18px 0 8px;
+        user-select: none;
     }
 
     .menu_icon {
@@ -1543,7 +1535,7 @@ const resizeSidebar = (delta: number, keyboard: boolean) => {
         width: var(--sidebar-icon-size);
         height: var(--sidebar-icon-size);
         margin-right: var(--sidebar-icon-gap);
-        color: var(--td-text-color-secondary);
+        color: var(--ad-muted);
 
         .icon {
             width: 18px;
@@ -1551,22 +1543,23 @@ const resizeSidebar = (delta: number, keyboard: boolean) => {
             overflow: hidden;
         }
 
-        // 图形几乎占满画布的图标缩小显示，否则会比其他图标大一圈
-        &.menu_icon--zhishiku .icon,
-        &.menu_icon--organization .icon,
-        .icon.icon--toggle {
+        // 线性导航图标:描边继承文字色,激活/悬浮随 .menu_icon 变主文字色
+        .nav-svg {
             width: 16px;
             height: 16px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 1.5;
         }
     }
 
     .menu_title {
-        color: var(--td-text-color-primary);
+        color: var(--ad-text);
         text-overflow: ellipsis;
         font-family: var(--app-font-family);
         font-size: var(--app-text-base);
         font-style: normal;
-        font-weight: 500;
+        font-weight: 400;
         line-height: 20px;
         overflow: hidden;
         white-space: nowrap;
@@ -1653,8 +1646,8 @@ const resizeSidebar = (delta: number, keyboard: boolean) => {
     .timeline_header {
         font-family: var(--app-font-family);
         font-size: var(--app-text-xs);
-        font-weight: 600;
-        color: var(--td-text-color-disabled);
+        font-weight: 400;
+        color: var(--ad-muted);
         padding-top: 4px;
         padding-bottom: 1px;
         margin-top: 0;
@@ -1717,28 +1710,29 @@ const resizeSidebar = (delta: number, keyboard: boolean) => {
         }
 
         &.session-chat-row:hover .session-list-row {
-            background: var(--td-bg-color-container-hover);
+            background: var(--ad-surface);
 
             :deep(.menu-more) {
-                color: var(--td-text-color-primary);
+                color: var(--ad-text);
             }
 
         }
 
         &.session-chat-row--active .session-list-row {
-            background: var(--td-bg-color-container-hover);
+            background: var(--ad-active);
 
             :deep(.submenu_item) {
-                color: var(--td-brand-color);
+                color: var(--ad-text);
+                font-weight: 500;
             }
 
             :deep(.menu-more) {
-                color: var(--td-text-color-primary);
+                color: var(--ad-text);
             }
         }
 
         &.session-chat-row--selected .session-list-row {
-            background: color-mix(in srgb, var(--td-brand-color) 5%, transparent);
+            background: color-mix(in srgb, var(--ad-accent) 5%, transparent);
         }
     }
 
@@ -1782,7 +1776,7 @@ const resizeSidebar = (delta: number, keyboard: boolean) => {
         .menu-more {
             display: inline-block;
             font-weight: bold;
-            color: var(--td-brand-color);
+            color: var(--ad-muted);
         }
 
         .submenu_title--batch {
@@ -1811,8 +1805,8 @@ const resizeSidebar = (delta: number, keyboard: boolean) => {
     align-items: center;
     justify-content: space-between;
     padding: 6px 12px;
-    border-top: 1px solid var(--td-component-stroke);
-    background: var(--td-bg-color-container);
+    border-top: 1px solid var(--ad-border);
+    background: var(--ad-ground);
 
     .batch-footer-left {
         display: flex;
@@ -1840,7 +1834,7 @@ const resizeSidebar = (delta: number, keyboard: boolean) => {
     padding: 24px 14px;
     text-align: center;
     font-size: var(--app-text-sm);
-    color: var(--td-text-color-placeholder);
+    color: var(--ad-faint);
     user-select: none;
 }
 

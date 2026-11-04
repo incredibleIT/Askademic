@@ -9300,7 +9300,34 @@ export default {
     logoutSuccess: '已退出登录',
     myChats: '我的对话',
     apiChats: 'API 会话',
-    noSessions: '暂无对话'
+    noSessions: '暂无对话',
+    groupChat: '对话',
+    groupKnowledge: '知识',
+    groupTools: '工具'
+  },
+  // 首页(编辑式问候外壳):问候语、提问框、数据 tiles 与面板。所有数字都来自真实接口,
+  // 拿不到的数据不展示(数据诚实原则)。
+  home: {
+    greetingMorning: '早上好',
+    greetingAfternoon: '下午好',
+    greetingEvening: '晚上好',
+    greetingFormat: '{greeting}，{name}。',
+    composerPlaceholder: '问一个教务问题，或描述一个任务…',
+    composerSend: '发送',
+    composerSending: '发送中…',
+    askFailed: '创建会话失败，请稍后再试',
+    tileKb: '知识库',
+    tileKbCaption: '本空间内全部',
+    tileDocs: '文档',
+    tileDocsCaption: '来自 {n} 个知识库',
+    tileSessions: '会话',
+    tileSessionsCaption: '随时接着上一次问',
+    recentSessions: '最近会话',
+    countChip: '{n} 个',
+    noSessionsYet: '还没有会话，从上面的问题开始',
+    kbActivity: '知识库动态',
+    manage: '管理',
+    noKbs: '本空间还没有知识库'
   },
   // 图片属性的展示文案，按属性名索引（后端注册表给出属性名，这里只做翻译）。
   // 注意：属性名里的点号要转义成下划线（contain.text → contain_text）——vue-i18n 按点号

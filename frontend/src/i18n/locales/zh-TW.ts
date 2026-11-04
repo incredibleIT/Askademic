@@ -9300,7 +9300,34 @@ export default {
     logoutSuccess: '已登出',
     myChats: '我的對話',
     apiChats: 'API 會話',
-    noSessions: '暫無對話'
+    noSessions: '暫無對話',
+    groupChat: '對話',
+    groupKnowledge: '知識',
+    groupTools: '工具'
+  },
+  // 首頁(編輯式問候外殼):問候語、提問框、數據 tiles 與面板。所有數字都來自真實接口,
+  // 拿不到的數據不展示(數據誠實原則)。
+  home: {
+    greetingMorning: '早上好',
+    greetingAfternoon: '下午好',
+    greetingEvening: '晚上好',
+    greetingFormat: '{greeting}，{name}。',
+    composerPlaceholder: '問一個教務問題，或描述一個任務…',
+    composerSend: '傳送',
+    composerSending: '傳送中…',
+    askFailed: '建立會話失敗，請稍後再試',
+    tileKb: '知識庫',
+    tileKbCaption: '本空間內全部',
+    tileDocs: '文件',
+    tileDocsCaption: '來自 {n} 個知識庫',
+    tileSessions: '會話',
+    tileSessionsCaption: '隨時接著上一次問',
+    recentSessions: '最近會話',
+    countChip: '{n} 個',
+    noSessionsYet: '還沒有會話，從上面的問題開始',
+    kbActivity: '知識庫動態',
+    manage: '管理',
+    noKbs: '本空間還沒有知識庫'
   },
   // 圖片屬性的展示文案，按屬性名索引（後端登錄檔給出屬性名，這裡只做翻譯）。
   // 注意：屬性名裡的點號要轉義成下劃線（contain.text → contain_text）——vue-i18n 按點號

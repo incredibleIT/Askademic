@@ -26,6 +26,7 @@ function isLiteSpaDefaultEntry(to: RouteLocationNormalized) {
   return (
     to.path === '/' ||
     to.path === '/platform' ||
+    to.path === '/platform/home' ||
     to.path === '/platform/knowledge-bases' ||
     to.name === 'knowledgeBaseList'
   )
@@ -46,7 +47,7 @@ const router = createRouter({
   routes: [
     {
       path: "/",
-      redirect: "/platform/knowledge-bases",
+      redirect: "/platform/home",
     },
     {
       path: "/login",
@@ -86,18 +87,26 @@ const router = createRouter({
       meta: { requiresInit: true, requiresAuth: true }
     },
     {
+      // 旧首页路由:保留 /knowledgeBase 路径兼容书签,名字让位给新的 Askademic 首页
       path: "/knowledgeBase",
-      name: "home",
+      name: "knowledgeBaseHome",
       component: () => import("../views/knowledge/KnowledgeBase.vue"),
       meta: { requiresInit: true, requiresAuth: true }
     },
     {
       path: "/platform",
       name: "Platform",
-      redirect: "/platform/knowledge-bases",
+      redirect: "/platform/home",
       component: () => import("../views/platform/index.vue"),
       meta: { requiresInit: true, requiresAuth: true },
       children: [
+        {
+          // Askademic 首页(Phase C):真实问候 + 提问框 + 数据 tiles + 面板
+          path: "home",
+          name: "home",
+          component: () => import("../views/home/Home.vue"),
+          meta: { requiresInit: true, requiresAuth: true }
+        },
         {
           path: "tenant",
           redirect: "/platform/settings"
@@ -326,7 +335,7 @@ router.beforeEach(async (to, from, next) => {
       }
     }
     if (authStore.hasValidTenant) {
-      next('/platform/knowledge-bases')
+      next('/platform/home')
     } else {
       next()
     }
@@ -335,9 +344,9 @@ router.beforeEach(async (to, from, next) => {
 
   // 如果访问的是登录页面或初始化页面，直接放行
   if (to.meta.requiresAuth === false || to.meta.requiresInit === false) {
-    // 如果已登录用户访问登录页面，重定向到知识库列表页面
+    // 如果已登录用户访问登录页面，重定向到首页
     if (to.path === '/login' && authStore.isLoggedIn) {
-      next(authStore.hasValidTenant ? '/platform/knowledge-bases' : '/onboarding/workspace')
+      next(authStore.hasValidTenant ? '/platform/home' : '/onboarding/workspace')
       return
     }
     next()
@@ -389,7 +398,7 @@ router.beforeEach(async (to, from, next) => {
   const requiredCapability = to.meta.requiredCapability as DeploymentCapabilityKey | undefined
   if (requiredCapability && !deploymentCapabilities.isSupported(requiredCapability)) {
     MessagePlugin.warning(i18n.global.t('settings.capabilityUnavailable'))
-    next('/platform/knowledge-bases')
+    next('/platform/home')
     return
   }
 
@@ -399,7 +408,7 @@ router.beforeEach(async (to, from, next) => {
   // the bounce. This is UI-only; the server enforces the real check.
   if (to.meta.requiresSystemAdmin === true) {
     if (!authStore.isSystemAdmin) {
-      next('/platform/knowledge-bases')
+      next('/platform/home')
       return
     }
   }

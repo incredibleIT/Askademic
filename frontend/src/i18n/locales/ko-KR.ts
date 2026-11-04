@@ -9299,7 +9299,34 @@ export default {
     logoutSuccess: '로그아웃되었습니다',
     myChats: '내 대화',
     apiChats: 'API 세션',
-    noSessions: '대화가 없습니다'
+    noSessions: '대화가 없습니다',
+    groupChat: '대화',
+    groupKnowledge: '지식',
+    groupTools: '도구'
+  },
+  // 홈(에디토리얼 그리팅 셸):인사, 질문 입력창, 데이터 타일과 패널. 모든 숫자는
+  // 실제 API에서 가져오며 가져올 수 없는 데이터는 표시하지 않습니다(데이터 정직 원칙).
+  home: {
+    greetingMorning: '좋은 아침입니다',
+    greetingAfternoon: '안녕하세요',
+    greetingEvening: '좋은 저녁입니다',
+    greetingFormat: '{greeting}, {name}.',
+    composerPlaceholder: '학사 질문이나 작업을 입력하세요…',
+    composerSend: '보내기',
+    composerSending: '보내는 중…',
+    askFailed: '세션 생성에 실패했습니다. 잠시 후 다시 시도해 주세요.',
+    tileKb: '지식베이스',
+    tileKbCaption: '이 스페이스의 전체',
+    tileDocs: '문서',
+    tileDocsCaption: '지식베이스 {n}개에서',
+    tileSessions: '세션',
+    tileSessionsCaption: '언제든 이어서 계속',
+    recentSessions: '최근 세션',
+    countChip: '총 {n}개',
+    noSessionsYet: '아직 세션이 없습니다. 위의 질문으로 시작해 보세요',
+    kbActivity: '지식베이스 활동',
+    manage: '관리',
+    noKbs: '이 스페이스에 아직 지식베이스가 없습니다'
   },
   // 관찰 속성의 표시 문구. 속성 이름으로 색인하며 여기서는 번역만 담당합니다.
   // 속성 이름의 점은 밑줄로 이스케이프합니다(contain.text → contain_text) —— vue-i18n 은

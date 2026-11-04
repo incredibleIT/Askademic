@@ -620,7 +620,34 @@ export default {
     logoutSuccess: 'ログアウトしました',
     myChats: 'マイチャット',
     apiChats: 'APIセッション',
-    noSessions: '会話はまだありません'
+    noSessions: '会話はまだありません',
+    groupChat: 'チャット',
+    groupKnowledge: 'ナレッジ',
+    groupTools: 'ツール'
+  },
+  // ホーム(編集式挨拶シェル):挨拶、入力欄、データタイルとパネル。数値はすべて
+  // 実APIから取得し、取得できないものは表示しない(データ誠実原則)。
+  home: {
+    greetingMorning: 'おはようございます',
+    greetingAfternoon: 'こんにちは',
+    greetingEvening: 'こんばんは',
+    greetingFormat: '{greeting}、{name}。',
+    composerPlaceholder: '教務に関する質問やタスクを入力してください…',
+    composerSend: '送信',
+    composerSending: '送信中…',
+    askFailed: 'セッションの作成に失敗しました。しばらくしてから再試行してください。',
+    tileKb: 'ナレッジベース',
+    tileKbCaption: 'このスペース内のすべて',
+    tileDocs: 'ドキュメント',
+    tileDocsCaption: '{n} 件のナレッジベースから',
+    tileSessions: 'セッション',
+    tileSessionsCaption: 'いつでも続きから再開',
+    recentSessions: '最近のセッション',
+    countChip: '全 {n} 件',
+    noSessionsYet: 'セッションはまだありません。上の質問から始めましょう',
+    kbActivity: 'ナレッジベースの更新',
+    manage: '管理',
+    noKbs: 'このスペースにはまだナレッジベースがありません'
   },
   chatHeader: {
     grants: {

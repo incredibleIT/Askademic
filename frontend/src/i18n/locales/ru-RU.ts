@@ -9299,7 +9299,34 @@ export default {
     logoutSuccess: 'Вы вышли из системы',
     myChats: 'Мои чаты',
     apiChats: 'Сессии API',
-    noSessions: 'Пока нет диалогов'
+    noSessions: 'Пока нет диалогов',
+    groupChat: 'Диалоги',
+    groupKnowledge: 'Знания',
+    groupTools: 'Инструменты'
+  },
+  // Главная(редакционный приветственный каркас): приветствие, поле вопроса,
+  // плитки данных и панели. Все числа приходят из реальных API; недоступное не показывается.
+  home: {
+    greetingMorning: 'Доброе утро',
+    greetingAfternoon: 'Добрый день',
+    greetingEvening: 'Добрый вечер',
+    greetingFormat: '{greeting}, {name}.',
+    composerPlaceholder: 'Задайте вопрос об учебных делах или опишите задачу…',
+    composerSend: 'Отправить',
+    composerSending: 'Отправка…',
+    askFailed: 'Не удалось создать сессию. Попробуйте позже.',
+    tileKb: 'Базы знаний',
+    tileKbCaption: 'Всё в этом пространстве',
+    tileDocs: 'Документы',
+    tileDocsCaption: 'Из {n} баз знаний',
+    tileSessions: 'Сессии',
+    tileSessionsCaption: 'Продолжите с того же места',
+    recentSessions: 'Недавние сессии',
+    countChip: 'Всего: {n}',
+    noSessionsYet: 'Сессий пока нет — начните с вопроса выше',
+    kbActivity: 'Активность баз знаний',
+    manage: 'Управление',
+    noKbs: 'В этом пространстве пока нет баз знаний'
   },
   // Тексты для наблюдаемых атрибутов изображения, с ключом по имени атрибута.
   // Точки в имени атрибута экранируются подчёркиванием (contain.text → contain_text):

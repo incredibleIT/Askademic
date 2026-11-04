@@ -620,7 +620,34 @@ export default {
     logoutSuccess: 'Logged out successfully',
     myChats: 'My chats',
     apiChats: 'API sessions',
-    noSessions: 'No conversations yet'
+    noSessions: 'No conversations yet',
+    groupChat: 'Chats',
+    groupKnowledge: 'Knowledge',
+    groupTools: 'Tools'
+  },
+  // Home (editorial-greeting shell): greeting, composer, data tiles and panels.
+  // Every number comes from a real API; anything unavailable is not shown.
+  home: {
+    greetingMorning: 'Good morning',
+    greetingAfternoon: 'Good afternoon',
+    greetingEvening: 'Good evening',
+    greetingFormat: '{greeting}, {name}.',
+    composerPlaceholder: 'Ask an academic question, or describe a task…',
+    composerSend: 'Send',
+    composerSending: 'Sending…',
+    askFailed: 'Failed to create the session. Please try again later.',
+    tileKb: 'Knowledge bases',
+    tileKbCaption: 'All in this workspace',
+    tileDocs: 'Documents',
+    tileDocsCaption: 'Across {n} knowledge bases',
+    tileSessions: 'Sessions',
+    tileSessionsCaption: 'Pick up where you left off',
+    recentSessions: 'Recent sessions',
+    countChip: '{n} in total',
+    noSessionsYet: 'No sessions yet — start with a question above',
+    kbActivity: 'Knowledge-base activity',
+    manage: 'Manage',
+    noKbs: 'No knowledge bases in this workspace yet'
   },
   chatHeader: {
     grants: {

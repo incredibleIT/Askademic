@@ -63,3 +63,8 @@ miniprogram/project.private.config.json
 
 # Locally built BrowserSkill runtime and extension bundles
 /artifacts/browserskill/
+
+# 设计工作目录(头脑风暴 mockup / taste-skill 工作文件)
+.superpowers/
+.taste-skill/
+graphify-out/

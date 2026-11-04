@@ -40,6 +40,7 @@
   --ad-text: #1f201d;
   --ad-muted: #636361;
   --ad-faint: #6b6b6b;
+  --ad-active: #ededed;            /* 激活导航底色(中性灰,原型 --active) */
   --ad-accent: #1b6e66;            /* 深青:强调色,预算 <2% */
   --ad-primary: #1d1f20;           /* 主按钮:近黑 */
   --ad-primary-hover: #3a3c3d;
@@ -87,8 +88,20 @@
   --td-button-primary-text-color-disabled: #ffffff;
 }
 
-/* 暗色模式下主按钮反转（原主题即白底黑字，保持）；选择器同样对齐 theme.css 的暗色块 */
+/* 暗色模式下主按钮反转（原主题即白底黑字，保持）；选择器同样对齐 theme.css 的暗色块。
+   --ad-* 暗色映射到 TDesign 暗色变量，保证侧栏/首页在暗色下不破 —— 专门的暗色适配
+   仍留给收尾阶段，这里只保证"不坏"。 */
 :root:root[theme-mode="dark"] {
+  --ad-ground: var(--td-bg-color-sidebar);
+  --ad-surface: var(--td-bg-color-secondarycontainer);
+  --ad-raised: var(--td-bg-color-container);
+  --ad-active: var(--td-bg-color-container-hover);
+  --ad-border: var(--td-component-stroke);
+  --ad-rule: var(--td-component-stroke);
+  --ad-control: var(--td-component-stroke);
+  --ad-text: var(--td-text-color-primary);
+  --ad-muted: var(--td-text-color-secondary);
+  --ad-faint: var(--td-text-color-placeholder);
   --td-button-primary-bg-color: #ffffff;
   --td-button-primary-bg-color-hover: #e0e0e0;
   --td-button-primary-bg-color-active: #c9c9c9;
