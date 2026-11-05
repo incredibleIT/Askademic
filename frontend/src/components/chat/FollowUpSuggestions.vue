@@ -71,18 +71,18 @@ const dismiss = () => {
   margin: -4px 0 28px;
   margin-right: auto;
   padding: 12px;
-  border: 1px solid var(--td-component-stroke);
-  border-radius: var(--app-radius-xl);
-  background: var(--td-bg-color-secondarycontainer);
+  border: 1px solid var(--ad-border);
+  border-radius: 12px;
+  background: var(--ad-surface);
 }
 .follow-ups__header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 8px;
-  color: var(--td-text-color-secondary);
+  color: var(--ad-muted);
   font-size: var(--app-text-md);
-  font-weight: 600;
+  font-weight: 500;
 }
 .follow-ups__title {
   display: inline-flex;
@@ -92,7 +92,7 @@ const dismiss = () => {
 .follow-ups__title .t-icon {
   width: 14px;
   height: 14px;
-  color: var(--td-text-color-placeholder);
+  color: var(--ad-faint);
   font-size: var(--app-text-base);
 }
 .follow-ups__actions { display: flex; gap: 4px; }
@@ -104,13 +104,13 @@ const dismiss = () => {
   border: 0;
   border-radius: var(--app-radius-sm);
   background: transparent;
-  color: var(--td-text-color-secondary);
+  color: var(--ad-muted);
   cursor: pointer;
   transition: background-color var(--app-motion-base), color var(--app-motion-base);
 }
 .follow-ups__actions button:hover:not(:disabled) {
-  background: var(--td-bg-color-container-hover);
-  color: var(--td-brand-color);
+  background: var(--ad-active);
+  color: var(--ad-text);
 }
 .follow-ups__actions button:disabled {
   cursor: not-allowed;
@@ -123,20 +123,20 @@ const dismiss = () => {
   justify-content: space-between;
   gap: 12px;
   width: 100%;
-  padding: 9px 11px;
-  border: 1px solid var(--td-component-stroke);
-  border-radius: var(--app-radius-md);
-  background: var(--td-bg-color-container);
-  color: var(--td-text-color-primary);
+  padding: 8px 12px;
+  border: 1px solid var(--ad-border);
+  border-radius: var(--app-radius-lg);
+  background: var(--ad-raised);
+  color: var(--ad-text);
+  font-size: var(--app-text-md);
   text-align: left;
   cursor: pointer;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
-  transition: border-color var(--app-motion-base) ease, box-shadow var(--app-motion-base) ease, background var(--app-motion-base) ease;
+  transition: border-color var(--app-motion-base) ease, background var(--app-motion-base) ease;
 }
 .follow-ups__item:hover {
   .suggestion-chip-hover();
 }
-.follow-ups__item:hover .t-icon { color: var(--td-text-color-secondary); }
+.follow-ups__item:hover .t-icon { color: var(--ad-muted); }
 .is-spinning { animation: wk-spin 1s linear infinite; }
 
 .follow-up-card-enter-active {
