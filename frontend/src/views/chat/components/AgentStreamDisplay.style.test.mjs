@@ -41,7 +41,7 @@ test('steer seals animation while keeping the preceding timeline open without co
 test('agent steps use compact muted timeline styling', () => {
   const theme = readFileSync(join(here, '../../../components/css/chat-timeline-theme.less'), 'utf8')
   assert.match(source, /\.chat-timeline-theme\(\)/)
-  assert.match(theme, /--agent-step-text-size:\s*14px/)
+  assert.match(theme, /--agent-step-text-size:\s*13px/)
   assert.match(theme, /--agent-step-summary-size:\s*13px/)
   assert.match(theme, /--agent-step-icon-color:\s*var\(--agent-step-color\)/)
   assert.match(source, /max-height:\s*none/)

@@ -3800,7 +3800,7 @@ const handleAddToKnowledge = (answerEvent: any) => {
   padding: 0;
   color: var(--td-text-color-primary);
   font-weight: 400;
-  min-height: 24px;
+  min-height: 34px; // 原型 .tool 行高 34px
   cursor: pointer;
   user-select: none;
   transition: background-color var(--app-motion-fast) ease;
@@ -4317,7 +4317,7 @@ const handleAddToKnowledge = (answerEvent: any) => {
   }
 
   .action-title {
-    gap: 12px;
+    gap: 9px; // 原型 .tool gap 9px
     position: relative;
   }
 
@@ -4343,16 +4343,16 @@ const handleAddToKnowledge = (answerEvent: any) => {
   .tree-child .action-title-icon {
     position: absolute;
     left: -42px;
-    top: 3px;
+    top: 1px;
   }
 
   .action-title .action-name,
   .action-name,
   .action-preamble-title {
     font-size: var(--agent-step-text-size);
-    font-weight: 400;
+    font-weight: 500; // 原型 .tool .name 500
     line-height: 1.55;
-    color: var(--agent-step-color);
+    color: var(--ad-text); // 行名墨色
   }
 
   .tree-root .action-name {

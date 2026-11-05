@@ -221,15 +221,13 @@ const getWebSearchDisplayText = (item) => {
     flex-direction: column;
     font-size: var(--app-text-sm);
     width: 100%;
-    border-radius: var(--app-radius-md);
-    background-color: var(--td-bg-color-container);
-    border: .5px solid var(--td-component-stroke);
-    box-shadow: 0 2px 4px var(--refer-brand-8);
+    border-radius: 12px; // 原型 .sources 12px
+    background-color: var(--ad-raised);
+    border: 1px solid var(--ad-border);
     box-sizing: border-box;
     overflow: hidden;
-    box-sizing: border-box;
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    margin-bottom: 8px;
+    margin: 14px 0 8px; // 原型 .sources margin-top 14px
 
     &.refer-timeline {
         --td-brand-color: var(--td-text-color-placeholder);
@@ -248,11 +246,11 @@ const getWebSearchDisplayText = (item) => {
 
         .refer_header {
             padding: 0;
-            font-weight: 400;
-            color: var(--td-text-color-secondary);
+            font-weight: 500;
+            color: var(--ad-text);
 
             .refer_title span {
-                font-size: var(--app-text-base);
+                font-size: var(--app-text-md); // 原型 sources-h .t 13px/500
                 white-space: normal;
             }
         }
@@ -279,8 +277,8 @@ const getWebSearchDisplayText = (item) => {
         }
 
         .doc-group-title {
-            color: var(--td-text-color-secondary);
-            font-weight: 400;
+            color: var(--ad-text);
+            font-weight: 500;
             font-size: var(--app-text-md);
             max-width: min(520px, 100%);
         }
@@ -292,21 +290,21 @@ const getWebSearchDisplayText = (item) => {
         }
 
         .doc-group-icon {
-            color: var(--td-text-color-placeholder);
+            color: var(--ad-muted);
         }
 
         .doc-group-navigate {
-            color: var(--td-text-color-placeholder);
+            color: var(--ad-muted);
         }
 
         .doc {
-            color: var(--td-text-color-secondary);
-            border-bottom-color: color-mix(in srgb, var(--td-text-color-secondary) 30%, transparent);
+            color: var(--ad-accent);
+            border-bottom-color: var(--ad-accent);
         }
 
         .doc-chunk-item .doc-chunk-text:hover {
-            background-color: var(--refer-brand-4);
-            color: var(--td-text-color-secondary);
+            background-color: var(--ad-active);
+            color: var(--ad-text);
         }
     }
 
@@ -314,7 +312,7 @@ const getWebSearchDisplayText = (item) => {
         display: flex;
         align-items: center;
         padding: 6px 14px;
-        color: var(--td-text-color-primary);
+        color: var(--ad-text);
         font-weight: 500;
 
         .refer_title {
@@ -325,27 +323,27 @@ const getWebSearchDisplayText = (item) => {
 
             span {
                 white-space: nowrap;
-                font-size: var(--app-text-sm);
+                font-size: var(--app-text-md); // 原型 sources-h .t 13px/500
             }
         }
 
         .refer_show_icon {
             font-size: var(--app-text-base);
             padding: 0 2px 1px 2px;
-            color: var(--td-brand-color);
+            color: var(--ad-muted);
             flex-shrink: 0;
         }
     }
 
     .refer_header:hover {
-        background-color: var(--refer-brand-4);
+        background-color: color-mix(in srgb, var(--ad-text) 4%, transparent);
         cursor: pointer;
     }
 
     .refer_box {
         padding: 4px 14px 8px 14px;
         flex-direction: column;
-        border-top: 1px solid var(--td-bg-color-secondarycontainer);
+        border-top: 1px solid var(--ad-rule);
     }
 }
 
@@ -354,12 +352,12 @@ const getWebSearchDisplayText = (item) => {
     height: 16px;
     margin-right: 8px;
     flex-shrink: 0;
-    color: var(--embed-primary, var(--td-brand-color));
+    color: var(--ad-muted);
 }
 
 .doc {
     text-decoration: none;
-    color: var(--td-brand-color);
+    color: var(--ad-accent);
     cursor: pointer;
     display: inline-block;
     white-space: nowrap;
@@ -369,11 +367,11 @@ const getWebSearchDisplayText = (item) => {
     line-height: 20px;
     padding: 2px 0;
     transition: all var(--app-motion-base) ease;
-    border-bottom: 1px dashed var(--td-brand-color);
+    border-bottom: 1px solid var(--ad-accent);
 
     &:hover {
-        background-color: var(--refer-brand-8);
-        border-radius: 3px;
+        background-color: color-mix(in srgb, var(--ad-accent) 8%, transparent);
+        border-radius: var(--app-radius-xs);
         padding-right: 4px;
     }
 
@@ -396,7 +394,7 @@ const getWebSearchDisplayText = (item) => {
         transition: background-color var(--app-motion-fast) ease;
 
         &:hover {
-            background-color: var(--refer-brand-4);
+            background-color: color-mix(in srgb, var(--ad-text) 4%, transparent);
         }
 
         .doc-group-left {
@@ -413,14 +411,15 @@ const getWebSearchDisplayText = (item) => {
         }
 
         .doc-group-icon {
-            color: var(--td-brand-color);
+            color: var(--ad-muted);
             flex-shrink: 0;
             margin-right: 6px;
         }
 
         .doc-group-title {
-            color: var(--td-text-color-primary);
-            font-weight: 500;
+            color: var(--ad-text);
+            font-weight: 500; // 原型 .src .doc 500
+            font-size: var(--app-text-md); // 原型 13px
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -428,8 +427,8 @@ const getWebSearchDisplayText = (item) => {
         }
 
         .doc-group-count {
-            color: var(--td-text-color-placeholder);
-            font-size: var(--app-text-xs);
+            color: var(--ad-muted);
+            font-size: var(--app-text-sm); // 原型 loc 12px
             margin-left: 6px;
             white-space: nowrap;
             flex-shrink: 0;
@@ -447,13 +446,14 @@ const getWebSearchDisplayText = (item) => {
             width: 22px;
             height: 22px;
             border-radius: var(--app-radius-xs);
-            color: var(--td-brand-color);
+            color: var(--ad-muted);
             cursor: pointer;
             text-decoration: none;
             transition: all var(--app-motion-fast) ease;
 
             &:hover {
-                background-color: var(--refer-brand-12);
+                background-color: color-mix(in srgb, var(--ad-text) 8%, transparent);
+                color: var(--ad-text);
             }
         }
     }
@@ -466,9 +466,9 @@ const getWebSearchDisplayText = (item) => {
 .doc-chunk-item {
     .doc-chunk-text {
         display: block;
-        color: var(--td-text-color-secondary);
-        font-size: var(--app-text-sm);
-        line-height: 18px;
+        color: var(--ad-muted); // 原型 .src .quote 13 灰
+        font-size: var(--app-text-md);
+        line-height: 1.6;
         padding: 3px 6px;
         border-radius: var(--app-radius-xs);
         cursor: pointer;
@@ -478,12 +478,13 @@ const getWebSearchDisplayText = (item) => {
         white-space: nowrap;
 
         &:hover {
-            background-color: var(--refer-brand-4);
-            color: var(--td-brand-color);
+            background-color: var(--ad-active);
+            color: var(--ad-text);
         }
 
         .doc-chunk-index {
-            color: var(--td-text-color-placeholder);
+            color: var(--ad-accent); // 原型 .src .idx 青色
+            font-weight: 500;
             font-size: var(--app-text-xs);
             margin-right: 4px;
         }

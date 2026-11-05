@@ -5,9 +5,9 @@
     gap: 2px;
     vertical-align: baseline;
     box-sizing: border-box;
-    border-radius: var(--app-radius-pill);
-    padding: 0 5px;
-    font-size: 0.72em;
+    border-radius: var(--app-radius-xs); // 原型 .cite 4px
+    padding: 1px 4px;
+    font-size: var(--app-text-xs); // 原型 .cite 11px
     line-height: 1.45;
     margin: 0 0.06em;
     background-clip: padding-box;
@@ -47,23 +47,24 @@
     text-overflow: ellipsis;
   }
 
-  // 引用标签只用浅底色区分，不加描边，避免像按钮一样抢正文
+  // 原型 .cite:青色 [n] 上标(#eef4f2 淡青底)。引用标记是来源面板 [n] 的行内呼应。
   :deep(.citation-kb),
   :deep(.citation-web) {
-    background: color-mix(in srgb, var(--td-text-color-primary) 6%, transparent);
-    color: var(--td-text-color-secondary);
+    background: color-mix(in srgb, var(--ad-accent) 9%, transparent);
+    color: var(--ad-accent);
     border: 0;
     cursor: pointer;
     white-space: nowrap;
     position: relative;
     text-decoration: none;
+    font-weight: 500;
     transition: background var(--app-motion-fast) ease, color var(--app-motion-fast) ease;
   }
 
   :deep(.citation-kb:hover),
   :deep(.citation-web:hover) {
-    background: color-mix(in srgb, var(--td-text-color-primary) 10%, transparent);
-    color: var(--td-text-color-primary);
+    background: color-mix(in srgb, var(--ad-accent) 14%, transparent);
+    color: var(--ad-accent);
   }
 
   :deep(.citation-web:focus-visible),
@@ -78,15 +79,15 @@
 
   :deep(a.wiki-content-link),
   :deep(.weknora-entity-link) {
-    color: var(--td-brand-color);
+    color: var(--ad-accent);
     cursor: pointer;
-    border-bottom: 1px dashed var(--td-brand-color);
+    border-bottom: 1px solid var(--ad-accent);
     text-decoration: none;
     font-weight: 500;
-    transition: border-bottom-style var(--app-motion-fast) ease;
+    transition: opacity var(--app-motion-fast) ease;
 
     &:hover {
-      border-bottom-style: solid;
+      opacity: 0.8;
       text-decoration: none !important;
     }
 
@@ -105,14 +106,14 @@
   width: 300px;
   max-width: calc(100vw - 32px);
   padding: 10px 12px 12px;
-  border: 0.5px solid var(--td-component-stroke);
-  border-radius: var(--app-radius-lg);
-  background: var(--td-bg-color-container);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04), 0 6px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--ad-border);
+  border-radius: 12px; // 原型面板 12px
+  background: var(--ad-raised);
+  box-shadow: 0 1px 3px rgba(31, 32, 29, 0.05), 0 6px 20px rgba(31, 32, 29, 0.08);
   font-family: var(--app-font-family);
   font-size: var(--app-text-sm);
   line-height: 1.6;
-  color: var(--td-text-color-primary);
+  color: var(--ad-text);
   overflow-wrap: anywhere;
   animation: chat-citation-float-in var(--app-motion-fast) ease-out both;
 
@@ -122,7 +123,7 @@
     gap: 6px;
     padding-bottom: 8px;
     margin-bottom: 8px;
-    border-bottom: 1px solid var(--td-component-stroke);
+    border-bottom: 1px solid var(--ad-rule);
   }
 
   &__icon {
@@ -130,7 +131,7 @@
     width: 14px;
     height: 14px;
     margin-top: 3px;
-    background-color: var(--td-text-color-placeholder);
+    background-color: var(--ad-muted);
     mask-size: contain;
     mask-repeat: no-repeat;
     mask-position: center;
@@ -158,19 +159,19 @@
     font-size: var(--app-text-md);
     font-weight: 500;
     line-height: 20px;
-    color: var(--td-text-color-primary);
+    color: var(--ad-text);
   }
 
   &__link {
     display: block;
     overflow: hidden;
-    color: var(--td-text-color-secondary);
+    color: var(--ad-muted);
     text-overflow: ellipsis;
     white-space: nowrap;
     text-decoration: none;
 
     &:hover {
-      color: var(--td-brand-color);
+      color: var(--ad-accent);
     }
   }
 
@@ -182,11 +183,11 @@
     line-clamp: 7;
     overflow: hidden;
     white-space: pre-line;
-    color: var(--td-text-color-secondary);
+    color: var(--ad-muted);
   }
 
   &__muted {
-    color: var(--td-text-color-placeholder);
+    color: var(--ad-faint);
   }
 
   &__error {

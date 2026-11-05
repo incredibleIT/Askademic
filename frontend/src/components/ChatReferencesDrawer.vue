@@ -465,8 +465,8 @@ watch(visible, (open) => {
   z-index: 1201;
   display: flex;
   flex-direction: column;
-  background: var(--td-bg-color-container);
-  border-left: 1px solid var(--td-component-stroke);
+  background: var(--ad-raised);
+  border-left: 1px solid var(--ad-border);
   box-shadow: -8px 0 24px rgba(0, 0, 0, 0.06);
 
   &.is-overlay {
@@ -508,7 +508,7 @@ watch(visible, (open) => {
   flex-shrink: 0;
   box-sizing: border-box;
   padding: 0 12px;
-  border-bottom: 1px solid var(--td-component-stroke);
+  border-bottom: 1px solid var(--ad-rule);
 }
 
 .chat-references-panel__heading {
@@ -522,7 +522,7 @@ watch(visible, (open) => {
   margin: 0;
   font-size: var(--app-text-base);
   font-weight: 500;
-  color: var(--td-text-color-secondary);
+  color: var(--ad-text);
   line-height: 20px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -530,14 +530,14 @@ watch(visible, (open) => {
 }
 
 .chat-references-panel__count {
-  color: var(--td-text-color-placeholder);
+  color: var(--ad-muted);
   font-weight: 500;
 }
 
 .chat-references-panel__close {
   border: 0;
-  background: var(--td-bg-color-secondarycontainer);
-  color: var(--td-text-color-secondary);
+  background: var(--ad-surface);
+  color: var(--ad-muted);
   width: 28px;
   height: 28px;
   border-radius: var(--app-radius-md);
@@ -549,8 +549,8 @@ watch(visible, (open) => {
   transition: background var(--app-motion-fast) ease, color var(--app-motion-fast) ease;
 
   &:hover {
-    background: color-mix(in srgb, var(--td-text-color-primary) 8%, var(--td-bg-color-secondarycontainer));
-    color: var(--td-text-color-primary);
+    background: var(--ad-active);
+    color: var(--ad-text);
   }
 }
 
@@ -597,11 +597,11 @@ watch(visible, (open) => {
   transition: background-color var(--app-motion-fast) ease;
 
   &:hover:not(.is-highlighted) {
-    background: color-mix(in srgb, var(--td-text-color-primary) 4%, transparent);
+    background: color-mix(in srgb, var(--ad-text) 4%, transparent);
   }
 
   &.is-highlighted {
-    background: var(--td-bg-color-secondarycontainer);
+    background: var(--ad-surface);
   }
 }
 
@@ -627,7 +627,7 @@ watch(visible, (open) => {
   border-radius: var(--app-radius-md);
 
   &:hover:not(.is-highlighted) {
-    background: var(--td-bg-color-container-hover);
+    background: var(--ad-active);
   }
 
   .reference-item__body {
@@ -642,8 +642,9 @@ watch(visible, (open) => {
 
   .reference-item__title {
     display: block;
-    font-size: var(--app-text-base);
+    font-size: var(--app-text-md); // 原型 .src .doc 13px/500
     font-weight: 500;
+    color: var(--ad-text);
     white-space: nowrap;
     text-overflow: ellipsis;
   }
@@ -651,7 +652,7 @@ watch(visible, (open) => {
   .reference-item__snippet {
     display: block;
     margin-top: 2px;
-    color: var(--td-text-color-placeholder);
+    color: var(--ad-muted); // 原型 .src .loc 12 灰
     font-size: var(--app-text-sm);
     line-height: 1.3;
     white-space: nowrap;
@@ -689,7 +690,7 @@ watch(visible, (open) => {
 .reference-item__domain {
   font-size: var(--app-text-md);
   line-height: 1.35;
-  color: var(--td-text-color-placeholder);
+  color: var(--ad-faint);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -709,7 +710,7 @@ watch(visible, (open) => {
   font-size: var(--app-text-lg);
   font-weight: 600;
   line-height: 1.4;
-  color: var(--td-text-color-primary);
+  color: var(--ad-text);
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -724,7 +725,7 @@ watch(visible, (open) => {
   border: 0;
   background: transparent;
   cursor: pointer;
-  color: var(--td-text-color-placeholder);
+  color: var(--ad-muted);
   line-height: 1;
   opacity: 0;
   transition: opacity var(--app-motion-fast) ease, color var(--app-motion-fast) ease;
@@ -737,14 +738,14 @@ watch(visible, (open) => {
 }
 
 .reference-item__open:hover {
-  color: var(--td-text-color-primary);
+  color: var(--ad-text);
 }
 
 .reference-item__snippet {
   margin: 4px 0 0;
   font-size: var(--app-text-md);
   line-height: 1.5;
-  color: var(--td-text-color-secondary);
+  color: var(--ad-muted);
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -755,7 +756,7 @@ watch(visible, (open) => {
   margin: 4px 0 0;
   font-size: var(--app-text-md);
   line-height: 1.55;
-  color: var(--td-text-color-secondary);
+  color: var(--ad-muted);
   white-space: pre-wrap;
   word-break: break-word;
   max-height: 360px;

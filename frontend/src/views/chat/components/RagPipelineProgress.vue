@@ -731,7 +731,7 @@ onBeforeUnmount(() => {
         .action-title-icon,
         .action-name,
         .results-summary-text {
-          color: var(--td-text-color-primary);
+          color: var(--ad-text);
         }
       }
     }
@@ -740,7 +740,7 @@ onBeforeUnmount(() => {
   .action-header {
     display: flex;
     align-items: center;
-    min-height: 24px;
+    min-height: 34px; // 原型 .tool 行高 34px
     padding: 0;
     cursor: pointer;
     user-select: none;
@@ -753,7 +753,7 @@ onBeforeUnmount(() => {
   .action-title {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 9px; // 原型 .tool gap 9px
     position: relative;
     flex: 0 1 auto;
     min-width: 0;
@@ -767,7 +767,7 @@ onBeforeUnmount(() => {
   .action-title-icon {
     position: absolute;
     left: -42px;
-    top: 3px;
+    top: 1px;
     width: 18px;
     height: 18px;
     flex-shrink: 0;
@@ -777,8 +777,8 @@ onBeforeUnmount(() => {
   .action-name {
     font-size: var(--agent-step-text-size);
     line-height: 1.55;
-    font-weight: 400;
-    color: var(--agent-step-color);
+    font-weight: 500; // 原型 .tool .name 500
+    color: var(--ad-text); // 行名墨色
     word-break: break-word;
     max-width: min(820px, 100%);
   }
@@ -815,7 +815,7 @@ onBeforeUnmount(() => {
   }
 
   .action-pending .action-name {
-    color: var(--agent-step-color);
+    color: var(--ad-text);
   }
 }
 

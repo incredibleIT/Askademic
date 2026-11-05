@@ -9,13 +9,13 @@
 @relevance-low: var(--td-text-color-placeholder);
 @relevance-weak: var(--td-text-color-disabled);
 
-// Card colors
-@card-bg: var(--td-bg-color-container);
-@card-border: var(--td-component-stroke);
-@card-hover-border: var(--td-brand-color);
-@card-radius: 6px;
-@card-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
-@card-shadow-hover: 0 2px 6px color-mix(in srgb, var(--td-brand-color) 8%, transparent);
+// Card colors(editorial:中性描边 + 墨系阴影,hover 不再用品牌青)
+@card-bg: var(--ad-raised);
+@card-border: var(--ad-border);
+@card-hover-border: var(--ad-control);
+@card-radius: var(--app-radius-lg);
+@card-shadow: 0 1px 3px rgba(31, 32, 29, 0.04);
+@card-shadow-hover: 0 2px 8px rgba(31, 32, 29, 0.06);
 
 // Animation timing
 @transition-time: 0.2s;
@@ -99,7 +99,7 @@
   transition: background-color var(--app-motion-fast) ease;
 
   &:hover {
-    background: color-mix(in srgb, var(--td-brand-color) 4%, transparent);
+    background: color-mix(in srgb, var(--ad-text) 4%, transparent);
   }
   
   * {
@@ -191,10 +191,10 @@
   }
 }
 
-// Statistics card (for KB counts, etc.)
+// Statistics card (for KB counts, etc.) — editorial 中性面板,不用品牌青底
 .stats-card {
-  background: color-mix(in srgb, var(--td-brand-color) 4%, transparent);
-  border: 1px solid color-mix(in srgb, var(--td-brand-color) 15%, transparent);
+  background: var(--ad-surface);
+  border: 1px solid var(--ad-border);
   border-radius: @card-radius;
   padding: 10px 12px;
   margin-bottom: 10px;
@@ -235,7 +235,7 @@
   flex-direction: column;
   gap: 4px;
   padding: 6px 0;
-  border-bottom: 1px solid var(--td-component-stroke);
+  border-bottom: 1px solid var(--ad-rule);
 
   &:last-child {
     border-bottom: none;
@@ -282,8 +282,8 @@
 
   &:hover {
     border-color: @card-hover-border;
-    color: @card-hover-border;
-    background: color-mix(in srgb, var(--td-brand-color) 4%, transparent);
+    color: var(--ad-text);
+    background: color-mix(in srgb, var(--ad-text) 4%, transparent);
   }
 }
 
@@ -294,9 +294,9 @@
   color: var(--td-text-color-placeholder);
   font-size: var(--app-text-sm);
   font-style: italic;
-  background: var(--td-bg-color-secondarycontainer);
+  background: var(--ad-surface);
   border-radius: @card-radius;
-  border: 1px dashed @card-border;
+  border: 1px dashed var(--ad-border);
 }
 
 // Code block

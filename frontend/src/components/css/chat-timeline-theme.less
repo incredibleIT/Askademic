@@ -1,8 +1,9 @@
 // Shared by both timeline hosts; child rows inherit exactly the same tone.
+// editorial-greeting: 行名 = 13px/500 墨色,摘要与详情 = --ad-muted,树干线 = --ad-border。
 .chat-timeline-theme() {
-  --agent-step-color: color-mix(in srgb, var(--td-text-color-secondary) 90%, var(--td-text-color-primary));
+  --agent-step-color: var(--ad-muted);
   --agent-step-icon-color: var(--agent-step-color);
-  --agent-step-text-size: 14px;
+  --agent-step-text-size: 13px;
   --agent-step-summary-size: 13px;
-  --agent-step-line-color: color-mix(in srgb, var(--td-text-color-primary) 16%, transparent);
+  --agent-step-line-color: var(--ad-border);
 }
