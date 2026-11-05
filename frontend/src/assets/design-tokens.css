@@ -56,6 +56,15 @@
   --app-font-family-serif: var(--ad-font-serif);
   --app-radius-xl: 22px;
 
+  /* ---------- TDesign 控件圆角:3px 方角 → editorial 圆角阶梯 ----------
+     深层页面(知识库/设置/智能体)的按钮、输入框、卡片全吃这组变量;
+     对齐 --app-radius 阶梯(xs4/sm6/md8/lg10),表单控件默认从 3px 抬到 6px。 */
+  --td-radius-small: 4px;
+  --td-radius-default: 6px;
+  --td-radius-medium: 8px;
+  --td-radius-large: 10px;
+  --td-radius-extraLarge: 12px;
+
   /* ---------- TDesign 品牌色:绿 → 深青 ---------- */
   --td-brand-color-1: #e9f2f1;
   --td-brand-color-2: #cde3e0;
@@ -102,6 +111,12 @@
   --ad-text: var(--td-text-color-primary);
   --ad-muted: var(--td-text-color-secondary);
   --ad-faint: var(--td-text-color-placeholder);
+  /* 圆角与色无关,与浅色保持同一 editorial 阶梯(theme.css 暗色块里的 2/3/6/9px 同步压过) */
+  --td-radius-small: 4px;
+  --td-radius-default: 6px;
+  --td-radius-medium: 8px;
+  --td-radius-large: 10px;
+  --td-radius-extraLarge: 12px;
   --td-button-primary-bg-color: #ffffff;
   --td-button-primary-bg-color-hover: #e0e0e0;
   --td-button-primary-bg-color-active: #c9c9c9;
