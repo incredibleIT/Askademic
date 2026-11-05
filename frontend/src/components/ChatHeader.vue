@@ -409,10 +409,12 @@ async function submitDeleteSession(): Promise<void> {
   min-width: 0;
   margin: 0;
   padding: 0;
-  color: var(--td-text-color-secondary);
-  font-size: var(--app-text-base);
-  font-weight: 500;
-  line-height: 20px;
+  // editorial-greeting:会话标题是本页的 h1,墨色 17px/600(原型 .convo-head h1)
+  color: var(--ad-text);
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.1px;
+  line-height: 24px;
   cursor: default;
 }
 
@@ -431,12 +433,14 @@ async function submitDeleteSession(): Promise<void> {
   min-width: 0;
   max-width: 160px;
   margin-left: 6px;
-  padding: 0 8px;
-  height: 22px;
-  border-radius: var(--app-radius-sm);
-  background: var(--td-bg-color-secondarycontainer);
-  color: var(--td-text-color-secondary);
-  font-size: var(--app-text-xs);
+  padding: 0 10px;
+  height: 24px;
+  // 原型 .chip:全圆角胶囊,调性面板底 + 1px 描边 + 灰字
+  border: 1px solid var(--ad-border);
+  border-radius: var(--app-radius-pill);
+  background: var(--ad-surface);
+  color: var(--ad-muted);
+  font-size: var(--app-text-sm);
   line-height: 22px;
   text-decoration: none;
   white-space: nowrap;
@@ -448,8 +452,8 @@ async function submitDeleteSession(): Promise<void> {
   }
 
   &:hover {
-    color: var(--td-brand-color);
-    background: var(--td-bg-color-secondarycontainer-hover);
+    color: var(--ad-text);
+    background: var(--ad-active);
   }
 }
 

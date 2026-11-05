@@ -2291,13 +2291,14 @@ onBeforeRouteUpdate((to, from, next) => {
     flex-shrink: 0;
     margin: 0 auto;
     width: 100%;
-    max-width: 960px;
+    // 与消息列同一条 760px 列线(原型:composer 与 transcript 同宽居中)
+    max-width: 792px;
     box-sizing: border-box;
     position: relative;
 
     &:not(.is-embedded) {
         padding: 0 var(--chat-content-inset, 20px);
-        max-width: calc(960px + 2 * var(--chat-content-inset, 20px));
+        max-width: calc(760px + 2 * var(--chat-content-inset, 20px));
     }
 
     &.is-embedded {
@@ -2328,7 +2329,8 @@ onBeforeRouteUpdate((to, from, next) => {
     display: flex;
     flex-direction: column;
     gap: 16px;
-    max-width: 960px;
+    // editorial-greeting:消息列 760px 阅读列(原型 .msgs),嵌入态含 16px 内边距
+    max-width: 792px;
     flex: 1;
     margin: 0 auto;
     width: 100%;
@@ -2336,7 +2338,7 @@ onBeforeRouteUpdate((to, from, next) => {
 
     &:not(.is-embedded) {
         padding: 0 var(--chat-content-inset, 20px);
-        max-width: calc(960px + 2 * var(--chat-content-inset, 20px));
+        max-width: calc(760px + 2 * var(--chat-content-inset, 20px));
     }
 
     // Matches the composer's inset, and keeps text clear of the scrollbar,

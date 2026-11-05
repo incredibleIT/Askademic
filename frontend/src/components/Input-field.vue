@@ -3385,7 +3385,7 @@ const getImgSrc = (url: string) => {
 
 .steer-queue {
   width: calc(100% - 24px);
-  max-width: 936px;
+  max-width: 736px;
   box-sizing: border-box;
   max-height: 140px;
   overflow-y: auto;
@@ -3454,11 +3454,14 @@ const getImgSrc = (url: string) => {
 .rich-input-container {
   position: relative;
   width: 100%;
-  max-width: 960px;
-  background: var(--td-bg-color-container);
-  border-radius: var(--app-radius-xl);
-  border: 1px solid var(--td-component-stroke);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04), 0 8px 16px -4px rgba(0, 0, 0, 0.06);
+  // 与消息列同一条 760px 列线(index.vue .msg_list / .input-container 已改)
+  max-width: 760px;
+  // editorial-greeting:白底浮起面板 + 1px 描边 + 20px 圆角,唯一允许带阴影的浮动元素
+  // (与首页 .ad-composer 同语言)
+  background: var(--ad-raised);
+  border-radius: 20px;
+  border: 1px solid var(--ad-border);
+  box-shadow: 0 2px 6px rgba(31, 32, 29, 0.05);
 
   &:focus-within {
     border-color: var(--td-brand-color);
@@ -3633,12 +3636,12 @@ const getImgSrc = (url: string) => {
   min-height: var(--composer-input-min-height, 72px) !important;
   resize: none;
   color: var(--td-text-color-primary);
-  font-size: var(--app-text-xl);
+  font-size: var(--app-text-base);
   font-weight: 400;
-  line-height: 24px;
+  line-height: 22px;
   font-family: var(--app-font-family);
   padding: 12px 16px;
-  border-radius: 0 0 12px 12px;
+  border-radius: 0 0 18px 18px;
   border: none;
   box-sizing: border-box;
   background: transparent;
@@ -3652,9 +3655,9 @@ const getImgSrc = (url: string) => {
   &::placeholder {
     color: var(--td-text-color-placeholder);
     font-family: var(--app-font-family);
-    font-size: var(--app-text-xl);
+    font-size: var(--app-text-base);
     font-weight: 400;
-    line-height: 24px;
+    line-height: 22px;
   }
 }
 
@@ -4145,12 +4148,13 @@ const getImgSrc = (url: string) => {
 }
 
 .stop-btn, .send-btn {
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   padding: 0;
   border-radius: 50%;
   box-sizing: border-box;
-  font-size: var(--app-text-xl);
+  // editorial-greeting:主操作近黑(与首页 .ad-send 同语言),图标随字号 18px
+  font-size: 18px;
   line-height: 1;
 
   &:focus-visible {
@@ -4160,20 +4164,20 @@ const getImgSrc = (url: string) => {
 }
 
 .stop-btn, .send-btn {
-  background-color: var(--td-brand-color);
+  background-color: var(--ad-primary);
   color: #fff;
 
   &:hover:not(.disabled) {
-    background-color: var(--td-brand-color-active);
+    background-color: var(--ad-primary-hover);
   }
 
   &.disabled {
     opacity: 1;
-    background-color: var(--td-bg-color-component);
-    color: var(--td-text-color-placeholder);
+    background-color: var(--ad-control);
+    color: var(--ad-muted);
 
     &:hover {
-      background-color: var(--td-bg-color-component);
+      background-color: var(--ad-control);
     }
   }
 

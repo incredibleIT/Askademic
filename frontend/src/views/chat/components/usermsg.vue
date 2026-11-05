@@ -265,22 +265,24 @@ const closePreImg = () => {
     width: max-content;
     max-width: min(76%, 820px);
     display: flex;
-    padding: 8px 12px;
+    padding: 10px 14px;
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
     gap: 4px;
     flex: 1 0 0;
-    border-radius: var(--app-radius-md);
-    background: var(--td-bg-color-secondarycontainer);
+    // 原型 .msg-user .bubble:调性面板 + 1px 描边 + 右下角收紧的不对称圆角
+    border-radius: 16px 16px 4px 16px;
+    border: 1px solid var(--ad-border);
+    background: var(--ad-surface);
+    box-sizing: border-box;
     margin-left: auto;
     color: var(--td-text-color-primary);
-    font-size: var(--app-text-xl);
-    line-height: 1.6;
+    font-size: var(--app-text-base);
+    line-height: 1.65;
     text-align: left;
     word-break: break-word;
     overflow-wrap: anywhere;
-    box-sizing: border-box;
     white-space: pre-wrap;
 }
 
@@ -394,7 +396,7 @@ const closePreImg = () => {
 
 html[theme-mode="dark"] {
     .user_msg {
-        background: var(--td-bg-color-secondarycontainer);
+        background: var(--ad-surface);
         color: var(--td-text-color-primary);
     }
 }
