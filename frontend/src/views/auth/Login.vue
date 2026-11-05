@@ -165,7 +165,7 @@
         </div>
         <div class="statement-block">
           <p class="statement">制度问题有据可查，<br>个人事务即问即答。</p>
-          <p class="statement-sub">面向高校教务场景的智能问答助手：一个空间就是一个班级，不同角色看到各自的数据。</p>
+          <p class="statement-sub">面向高校教务场景的智能问答助手：制度、课表、个人事务，问一句就答，回答附知识库出处。</p>
         </div>
         <div class="cap-panel">
           <div class="cap-row">
