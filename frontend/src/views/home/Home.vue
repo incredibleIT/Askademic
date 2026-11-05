@@ -50,25 +50,29 @@
             <span v-if="sessionTotal !== null" class="ad-chip ad-chip--static">{{ t('home.countChip', { n: sessionTotal }) }}</span>
           </div>
           <div v-if="sessionsLoaded && sessions.length === 0" class="ad-empty">{{ t('home.noSessionsYet') }}</div>
-          <button v-for="s in sessions" :key="s.id" class="ad-rowcard" type="button" @click="openSession(s.id)">
-            <div class="rc-main">
-              <div class="rc-title">{{ s.title || t('menu.newSession') }}</div>
-            </div>
-            <div class="rc-side">{{ formatWhen(s.updated_at || s.created_at) }}</div>
-          </button>
+          <div v-else class="ad-panel-list">
+            <button v-for="s in sessions" :key="s.id" class="ad-rowcard" type="button" @click="openSession(s.id)">
+              <div class="rc-main">
+                <div class="rc-title">{{ s.title || t('menu.newSession') }}</div>
+              </div>
+              <div class="rc-side">{{ formatWhen(s.updated_at || s.created_at) }}</div>
+            </button>
+          </div>
         </section>
         <section v-if="recentDocs.length" class="ad-panel span3">
           <div class="ad-panel-head">
             <h2>{{ t('home.kbActivity') }}</h2>
           </div>
-          <button v-for="(doc, idx) in recentDocs" :key="doc.kbId + '-' + idx" class="ad-rowcard" type="button"
-            @click="openKb(doc.kbId)">
-            <div class="rc-main">
-              <div class="rc-title">{{ doc.name }}</div>
-              <div class="rc-sub">{{ doc.kbName }}</div>
-            </div>
-            <div class="rc-side">{{ formatShortDate(doc.date) }}</div>
-          </button>
+          <div class="ad-panel-list">
+            <button v-for="(doc, idx) in recentDocs" :key="doc.kbId + '-' + idx" class="ad-rowcard" type="button"
+              @click="openKb(doc.kbId)">
+              <div class="rc-main">
+                <div class="rc-title">{{ doc.name }}</div>
+                <div class="rc-sub">{{ doc.kbName }}</div>
+              </div>
+              <div class="rc-side">{{ formatShortDate(doc.date) }}</div>
+            </button>
+          </div>
         </section>
       </div>
 
@@ -256,9 +260,9 @@ onMounted(async () => {
     console.error('[home] fetchSharedKnowledgeBases failed:', error)
   }
 
-  // 最近会话(列表 + 真实总数)
+  // 最近会话(列表 + 真实总数):拉 10 条,面板限高 ~5 行、其余列表内滚动查看
   try {
-    const res: any = await getSessionsList(1, 5)
+    const res: any = await getSessionsList(1, 10)
     sessions.value = Array.isArray(res?.data) ? res.data : []
     sessionTotal.value = Number(res?.total ?? sessions.value.length)
   } catch (error) {
@@ -287,7 +291,7 @@ onMounted(async () => {
       .flatMap(r => r.value)
       .filter(doc => doc.name)
     merged.sort((a, b) => (a.date < b.date ? 1 : -1))
-    recentDocs.value = merged.slice(0, 5)
+    recentDocs.value = merged.slice(0, 8)
   }
 
   // 建议问题:来自当前 Agent 的真实配置(与 creatChat 同源);没有 Agent 就不出 chips
@@ -544,6 +548,29 @@ const formatWhen = (iso?: string) => {
   color: var(--ad-text);
   text-decoration: underline;
   text-underline-offset: 3px;
+}
+
+/* 面板列表限高:条数多时面板不再无限下伸,列表内部滚动。
+   5 行(5×63 + 4×8 = 347px),同行两面板由 grid stretch 保持等高。 */
+.ad-panel-list {
+  max-height: 350px;
+  overflow-y: auto;
+  min-width: 0;
+  scrollbar-width: thin;
+  scrollbar-color: var(--ad-control) transparent;
+}
+
+.ad-panel-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.ad-panel-list::-webkit-scrollbar-thumb {
+  background: var(--ad-control);
+  border-radius: 999px;
+}
+
+.ad-panel-list::-webkit-scrollbar-track {
+  background: transparent;
 }
 
 .ad-rowcard {
