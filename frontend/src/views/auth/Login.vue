@@ -760,6 +760,15 @@ onMounted(async () => {
   background: transparent;
 }
 
+// 登录/注册两态共用的表单节奏:字段间距统一,提交区与字段区分离
+.form-card :deep(.t-form__item) {
+  margin-bottom: 18px;
+}
+
+.form-card :deep(.t-form__item:last-child) {
+  margin-bottom: 0; // 按钮的 margin-top 负责提交区间距,不叠加
+}
+
 .form-header {
   margin-bottom: 14px;
 
@@ -781,6 +790,7 @@ onMounted(async () => {
 }
 
 .submit-button {
+  margin-top: 18px; // 最后一个字段与主按钮之间留呼吸位(TDesign 默认贴死)
   background-color: var(--ad-primary) !important;
   border-color: var(--ad-primary) !important;
   color: #fff !important;
