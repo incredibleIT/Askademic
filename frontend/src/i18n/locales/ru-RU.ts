@@ -6743,7 +6743,6 @@ export default {
     registerFailed: 'Ошибка регистрации',
     subtitle: 'Вопросы и ответы по учебным делам · каждый ответ с источником',
     registerSubtitle: 'Создайте аккаунт и начните работу с Askademic',
-    loginFootOrg: 'Ассистент учебных дел группы CS2401 · развёрнут в XX университете',
     emailPlaceholder: 'Введите адрес электронной почты',
     passwordPlaceholder: 'Введите пароль',
     confirmPasswordPlaceholder: 'Введите пароль ещё раз',

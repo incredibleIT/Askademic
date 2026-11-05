@@ -6743,7 +6743,6 @@ export default {
     registerFailed: '가입 실패',
     subtitle: '캠퍼스 학사 Q&A · 근거가 있는 답변',
     registerSubtitle: '계정을 만들고 Askademic를 시작하세요',
-    loginFootOrg: 'CS2401 반의 학사 어시스턴트 · XX대학 배치',
     emailPlaceholder: '이메일 주소 입력',
     passwordPlaceholder: '비밀번호 입력',
     confirmPasswordPlaceholder: '비밀번호 다시 입력',

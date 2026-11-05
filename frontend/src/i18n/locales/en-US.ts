@@ -3117,7 +3117,6 @@ export default {
     registerFailed: 'Registration failed',
     subtitle: 'Campus academic Q&A · every answer with its source',
     registerSubtitle: 'Create your account and start using Askademic',
-    loginFootOrg: 'The academic-affairs assistant for class CS2401 · deployed at XX University',
     emailPlaceholder: 'Enter email address',
     passwordPlaceholder: 'Enter password',
     confirmPasswordPlaceholder: 'Enter password again',

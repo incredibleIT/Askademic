@@ -150,7 +150,7 @@
         </div>
 
         <p class="foot">
-          <b>Askademic</b> · {{ $t('auth.loginFootOrg') }}
+          <b>Askademic</b> · {{ $t('auth.subtitle') }}
         </p>
       </div>
 

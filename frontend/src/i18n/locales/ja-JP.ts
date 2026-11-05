@@ -3117,7 +3117,6 @@ export default {
     registerFailed: '登録に失敗しました',
     subtitle: 'キャンパス教务Q&A · 出典つきの回答',
     registerSubtitle: 'アカウントを作成してAskademicを使い始めましょう',
-    loginFootOrg: 'CS2401クラスの教务アシスタント · XX大学に配備',
     emailPlaceholder: 'メールアドレスを入力',
     passwordPlaceholder: 'パスワードを入力',
     confirmPasswordPlaceholder: 'パスワードを再入力',

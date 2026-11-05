@@ -6744,7 +6744,6 @@ export default {
     registerFailed: '註冊失敗',
     subtitle: '校園教務智能問答 · 回答有據可查',
     registerSubtitle: '建立帳戶並開始使用 Askademic',
-    loginFootOrg: '計科2401班的教務問答助手 · 部署於 XX大學',
     emailPlaceholder: '輸入電子信箱地址',
     passwordPlaceholder: '輸入密碼',
     confirmPasswordPlaceholder: '再次輸入密碼',
