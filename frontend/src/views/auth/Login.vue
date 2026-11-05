@@ -161,7 +161,6 @@
         <div class="mini-brand">
           <div class="mini-mark" aria-hidden="true">问</div>
           <div class="mini-name">Askademic</div>
-          <div class="mini-space">{{ orgLabel }}</div>
         </div>
         <div class="statement-block">
           <p class="statement">制度问题有据可查，<br>个人事务即问即答。</p>
@@ -213,8 +212,6 @@ const route = useRoute()
 const authStore = useAuthStore()
 const { t, tm, locale } = useI18n()
 const { formatRole, roleIcon } = useRoleLabel()
-
-const orgLabel = BRAND.org
 
 // Form references
 const formRef = ref()
@@ -923,11 +920,6 @@ onMounted(async () => {
     font: 600 15px/1.2 var(--app-font-family);
     letter-spacing: -0.2px;
     color: var(--ad-text);
-  }
-  .mini-space {
-    margin-left: auto;
-    font: 400 13px/1.2 var(--app-font-family);
-    color: var(--ad-muted);
   }
 }
 
