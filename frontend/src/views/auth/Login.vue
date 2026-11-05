@@ -24,8 +24,8 @@
       <!-- 右列：表单（DOM 在前，手机端自然先渲染表单） -->
       <div class="formcol">
         <div class="brand-block">
-          <div class="mark" aria-hidden="true">问</div>
-          <h1 class="brand-name">Askademic</h1>
+          <BrandWordmark :height="30" class="brand-logo" />
+          <h1 class="sr-only-brand">Askademic</h1>
           <p class="brand-sub">{{ $t('auth.subtitle') }}</p>
         </div>
 
@@ -159,8 +159,7 @@
            当前只陈述产品定义（来自 docs/superpowers/specs），不展示伪造数据。 -->
       <div class="sheet" data-ui aria-label="Askademic 产品预览">
         <div class="mini-brand">
-          <div class="mini-mark" aria-hidden="true">问</div>
-          <div class="mini-name">Askademic</div>
+          <BrandWordmark :height="18" />
         </div>
         <div class="statement-block">
           <p class="statement">制度问题有据可查，<br>个人事务即问即答。</p>
@@ -203,6 +202,7 @@ import {
   type InviteLookup,
 } from '@/api/auth'
 import { useAuthStore } from '@/stores/auth'
+import BrandWordmark from '@/components/BrandWordmark.vue'
 import { useI18n } from 'vue-i18n'
 import { getApiBaseUrl } from '@/utils/api-base'
 import { BRAND } from '@/config/brand'
@@ -728,23 +728,18 @@ onMounted(async () => {
 .brand-block {
   margin-bottom: 24px;
 
-  .mark {
-    width: 38px;
-    height: 38px;
-    border-radius: 11px;
-    background: var(--ad-accent);
-    color: #fff;
-    font: 500 22px/1 var(--app-font-family-serif);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 14px;
+  .brand-logo {
+    margin-bottom: 10px;
   }
-  .brand-name {
-    font: 500 28px/1.1 var(--app-font-family-serif);
-    letter-spacing: 0.2px;
-    margin: 0 0 6px;
-    color: var(--ad-text);
+  /* 字标图片即品牌展示,h1 仅保留文档语义(inspect 标题检查) */
+  .sr-only-brand {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
   }
   .brand-sub {
     font: 400 13px/1.6 var(--app-font-family);
@@ -902,25 +897,7 @@ onMounted(async () => {
 .mini-brand {
   display: flex;
   align-items: center;
-  gap: 9px;
   margin-bottom: 20px;
-
-  .mini-mark {
-    width: 24px;
-    height: 24px;
-    border-radius: 7px;
-    background: var(--ad-accent);
-    color: #fff;
-    font: 500 14px/1 var(--app-font-family-serif);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .mini-name {
-    font: 600 15px/1.2 var(--app-font-family);
-    letter-spacing: -0.2px;
-    color: var(--ad-text);
-  }
 }
 
 .statement-block {

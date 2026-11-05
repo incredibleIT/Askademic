@@ -2,10 +2,9 @@
     <div class="aside_box" :class="{ 'aside_box--collapsed': uiStore.sidebarCollapsed, 'aside_box--resizing': uiStore.sidebarResizing }">
         <!-- 展开时：Logo + 搜索/折叠按钮同行 -->
         <div class="logo_row" v-if="!uiStore.sidebarCollapsed">
-            <!-- Askademic 品牌字标（脱敏：替换 weknora.png，来源 brand.ts 单一事实源） -->
+            <!-- Askademic 品牌字标(用户设计稿矢量清理版;来源 brand.ts 单一事实源) -->
             <div class="logo_box" @click="router.push('/platform/home')" style="cursor: pointer;">
-                <span class="brand-mark" aria-hidden="true">问</span>
-                <span v-if="!uiStore.sidebarCollapsed" class="brand-word">Askademic</span>
+                <BrandWordmark :height="20" />
                 <sup v-if="isLiteEdition" class="lite-badge">Lite</sup>
             </div>
             <div class="logo_actions">
@@ -292,6 +291,7 @@ import { useUIStore } from '@/stores/ui';
 import { useCommandPaletteStore } from '@/stores/commandPalette';
 import { useAssistantStore } from '@/stores/assistant';
 import AssistantButton from '@/components/assistant/AssistantButton.vue';
+import BrandWordmark from '@/components/BrandWordmark.vue';
 import { MessagePlugin, DialogPlugin, Icon as TIcon } from "tdesign-vue-next";
 import UserMenu from '@/components/UserMenu.vue';
 import TenantSelector from '@/components/TenantSelector.vue';
@@ -1362,27 +1362,6 @@ const resizeSidebar = (delta: number, keyboard: boolean) => {
         flex: 1;
         min-width: 0;
         overflow: hidden;
-
-        .brand-mark {
-            width: 26px;
-            height: 26px;
-            border-radius: 8px;
-            flex: none;
-            background: var(--ad-accent);
-            color: #fff;
-            font: 500 15px/1 var(--app-font-family-serif);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .brand-word {
-            margin-left: 9px;
-            font: 600 16px/1.2 var(--app-font-family);
-            letter-spacing: -0.2px;
-            color: var(--td-text-color-primary);
-            white-space: nowrap;
-        }
 
         .lite-badge {
             margin-left: 2px;
