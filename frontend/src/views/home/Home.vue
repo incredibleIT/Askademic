@@ -72,7 +72,7 @@
         </section>
       </div>
 
-      <!-- 12 列行:空间知识库(面板标题复用 menu.knowledgeBase;"管理"进知识库列表) -->
+      <!-- 12 列行:空间知识库(含组织共享来的库;面板标题复用 menu.knowledgeBase) -->
       <div class="ad-grid">
         <section class="ad-panel span12">
           <div class="ad-panel-head">
@@ -80,12 +80,13 @@
             <span v-if="kbCount !== null" class="ad-chip ad-chip--static">{{ t('home.countChip', { n: kbCount }) }}</span>
             <router-link class="ad-all" to="/platform/knowledge-bases">{{ t('home.manage') }}</router-link>
           </div>
-          <div v-if="kbsLoaded && kbs.length === 0" class="ad-empty">{{ t('home.noKbs') }}</div>
-          <button v-for="kb in kbs" :key="kb.id" class="ad-rowcard" type="button" @click="openKb(kb.id)">
+          <div v-if="kbsLoaded && kbRows.length === 0" class="ad-empty">{{ t('home.noKbs') }}</div>
+          <button v-for="row in kbRows" :key="row.id" class="ad-rowcard" type="button" @click="openKb(row.id)">
             <div class="rc-main">
-              <div class="rc-title">{{ kb.name }}</div>
+              <div class="rc-title">{{ row.name }}</div>
+              <div v-if="row.sharedOrgName" class="rc-sub">{{ t('home.sharedFrom', { name: row.sharedOrgName }) }}</div>
             </div>
-            <div class="rc-side">{{ t('knowledgeBase.documentCount', { count: kb.knowledge_count || 0 }) }}</div>
+            <div class="rc-side">{{ t('knowledgeBase.documentCount', { count: row.docs }) }}</div>
           </button>
         </section>
       </div>
@@ -108,6 +109,7 @@ import type { SuggestedQuestion } from '@/api/agent/index'
 import { useAuthStore } from '@/stores/auth'
 import { useSettingsStore } from '@/stores/settings'
 import { useMenuStore } from '@/stores/menu'
+import { useOrganizationStore } from '@/stores/organization'
 import { BRAND } from '@/config/brand'
 
 const { t, locale } = useI18n()
@@ -115,6 +117,7 @@ const router = useRouter()
 const authStore = useAuthStore()
 const settingsStore = useSettingsStore()
 const usemenuStore = useMenuStore()
+const orgStore = useOrganizationStore()
 
 /* ---------- 问候 ---------- */
 const greeting = computed(() => {
@@ -201,17 +204,56 @@ const sessionsLoaded = ref(false)
 const sessionTotal = ref<number | null>(null)
 const recentDocs = ref<Array<{ name: string; kbId: string; kbName: string; date: string }>>([])
 
+// 共享知识库(经组织共享到本空间,如教务处的制度文库):与 KB 列表页同源
+// (GET /api/v1/shared-knowledge-bases,store 内有并发去重),按用户要求并入
+// 本空间知识库面板与计数。
+interface HomeKbRow {
+  id: string
+  name: string
+  docs: number
+  sharedOrgName: string
+}
+const kbRows = computed<HomeKbRow[]>(() => {
+  const rows: HomeKbRow[] = kbs.value.map(kb => ({
+    id: String(kb.id),
+    name: String(kb.name || ''),
+    docs: Number(kb?.knowledge_count) || 0,
+    sharedOrgName: '',
+  }))
+  for (const shared of orgStore.sharedKnowledgeBases) {
+    const kb = shared.knowledge_base
+    if (!kb || rows.some(row => row.id === String(kb.id))) continue
+    rows.push({
+      id: String(kb.id),
+      name: String(kb.name || ''),
+      docs: Number(kb?.knowledge_count) || 0,
+      sharedOrgName: String(shared.org_name || ''),
+    })
+  }
+  return rows
+})
+
 onMounted(async () => {
-  // 知识库与文档数
+  // 知识库与文档数(计数含共享库,与下方面板一致)
+  const computeKbCounts = () => {
+    kbCount.value = kbRows.value.length
+    kbDocs.value = kbRows.value.reduce((sum, row) => sum + row.docs, 0)
+  }
   try {
     const res: any = await listKnowledgeBases()
     kbs.value = Array.isArray(res?.data) ? res.data : []
-    kbCount.value = kbs.value.length
-    kbDocs.value = kbs.value.reduce((sum: number, kb: any) => sum + (Number(kb?.knowledge_count) || 0), 0)
+    computeKbCounts()
   } catch (error) {
     console.error('[home] listKnowledgeBases failed:', error)
   } finally {
     kbsLoaded.value = true
+  }
+  // 共享知识库:store 有版本化去重,Promise 拿到后重算计数
+  try {
+    await orgStore.fetchSharedKnowledgeBases()
+    computeKbCounts()
+  } catch (error) {
+    console.error('[home] fetchSharedKnowledgeBases failed:', error)
   }
 
   // 最近会话(列表 + 真实总数)
@@ -226,17 +268,18 @@ onMounted(async () => {
   }
 
   // 知识库动态:各库最近更新的文档(全体成员可读;按库的审计日志仅创建者/管理员可见,
-  // 学生/教师会 403,故这里用文档列表充当"动态",拿不到就整块隐藏)
-  const targets = kbs.value.slice(0, 4)
+  // 学生/教师会 403,故这里用文档列表充当"动态",拿不到就整块隐藏)。共享库同样并入
+  // —— 班级里最常更新的是教务处共享来的制度文库。
+  const targets = kbRows.value.slice(0, 4)
   if (targets.length) {
-    const settled = await Promise.allSettled(targets.map(async (kb: any) => {
-      const res: any = await listKnowledgeFiles(kb.id, { page: 1, page_size: 4, sort_by: 'updated_at', sort_order: 'desc' })
+    const settled = await Promise.allSettled(targets.map(async (row) => {
+      const res: any = await listKnowledgeFiles(row.id, { page: 1, page_size: 4, sort_by: 'updated_at', sort_order: 'desc' })
       const rows = Array.isArray(res?.data) ? res.data : []
-      return rows.map((row: any) => ({
-        name: String(row?.file_name || row?.knowledge_title || ''),
-        kbId: String(kb.id),
-        kbName: String(kb.name || ''),
-        date: String(row?.updated_at || row?.created_at || ''),
+      return rows.map((row2: any) => ({
+        name: String(row2?.file_name || row2?.knowledge_title || ''),
+        kbId: row.id,
+        kbName: row.name,
+        date: String(row2?.updated_at || row2?.created_at || ''),
       }))
     }))
     const merged = settled

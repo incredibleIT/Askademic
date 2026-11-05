@@ -9324,6 +9324,7 @@ export default {
     recentSessions: 'Недавние сессии',
     countChip: 'Всего: {n}',
     noSessionsYet: 'Сессий пока нет — начните с вопроса выше',
+    sharedFrom: '{name} · Общий',
     kbActivity: 'Активность баз знаний',
     manage: 'Управление',
     noKbs: 'В этом пространстве пока нет баз знаний'

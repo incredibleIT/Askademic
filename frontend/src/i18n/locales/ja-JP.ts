@@ -645,6 +645,7 @@ export default {
     recentSessions: '最近のセッション',
     countChip: '全 {n} 件',
     noSessionsYet: 'セッションはまだありません。上の質問から始めましょう',
+    sharedFrom: '{name} · 共有',
     kbActivity: 'ナレッジベースの更新',
     manage: '管理',
     noKbs: 'このスペースにはまだナレッジベースがありません'

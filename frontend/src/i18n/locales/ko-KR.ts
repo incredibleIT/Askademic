@@ -9324,6 +9324,7 @@ export default {
     recentSessions: '최근 세션',
     countChip: '총 {n}개',
     noSessionsYet: '아직 세션이 없습니다. 위의 질문으로 시작해 보세요',
+    sharedFrom: '{name} · 공유',
     kbActivity: '지식베이스 활동',
     manage: '관리',
     noKbs: '이 스페이스에 아직 지식베이스가 없습니다'

@@ -9325,6 +9325,7 @@ export default {
     recentSessions: '最近会话',
     countChip: '{n} 个',
     noSessionsYet: '还没有会话，从上面的问题开始',
+    sharedFrom: '{name} · 共享',
     kbActivity: '知识库动态',
     manage: '管理',
     noKbs: '本空间还没有知识库'

@@ -645,6 +645,7 @@ export default {
     recentSessions: 'Recent sessions',
     countChip: '{n} in total',
     noSessionsYet: 'No sessions yet — start with a question above',
+    sharedFrom: '{name} · Shared',
     kbActivity: 'Knowledge-base activity',
     manage: 'Manage',
     noKbs: 'No knowledge bases in this workspace yet'

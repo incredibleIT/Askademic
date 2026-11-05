@@ -9325,6 +9325,7 @@ export default {
     recentSessions: '最近會話',
     countChip: '{n} 個',
     noSessionsYet: '還沒有會話，從上面的問題開始',
+    sharedFrom: '{name} · 共享',
     kbActivity: '知識庫動態',
     manage: '管理',
     noKbs: '本空間還沒有知識庫'
