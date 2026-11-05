@@ -358,7 +358,8 @@ const formatWhen = (iso?: string) => {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   gap: 16px;
-  align-items: start;
+  /* 同一行的面板等高拉伸(默认 stretch):最近会话比知识库动态矮时,
+     面板底色补齐整行,不留断开的空白 */
   margin-top: 16px;
 }
 
