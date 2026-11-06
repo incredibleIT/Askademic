@@ -6178,7 +6178,7 @@ export default {
     allowFileUpload: 'Показывать кнопку загрузки изображений',
     allowFileUploadDesc: 'При включении посетители видят кнопку загрузки изображений в поле ввода. Кнопка появляется только если у привязанного агента включена загрузка изображений.',
     webhookUrl: 'Webhook URL',
-    webhookUrlPlaceholder: 'https://your-server.example.com/weknora/embed-events',
+    webhookUrlPlaceholder: 'https://your-server.example.com/askademic/embed-events',
     webhookUrlDesc: 'Optional. Askademic POSTs message_sent / message_received events to this HTTPS endpoint.',
     webhookSecret: 'Webhook secret',
     webhookSecretPlaceholder: 'HMAC-SHA256 secret (X-WeKnora-Signature header)',

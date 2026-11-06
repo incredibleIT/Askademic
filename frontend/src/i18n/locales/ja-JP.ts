@@ -3641,7 +3641,7 @@ export default {
     allowFileUpload: 'ファイルアップロードを表示',
     allowFileUploadDesc: '有効にすると、訪問者は画像やドキュメントの添付をアップロードできます。紐付けたエージェントが画像アップロードに対応している必要があります。',
     webhookUrl: 'Webhook URL',
-    webhookUrlPlaceholder: 'https://your-server.example.com/weknora/embed-events',
+    webhookUrlPlaceholder: 'https://your-server.example.com/askademic/embed-events',
     webhookUrlDesc: '任意。Askademicがmessage_sent / message_receivedイベントをこのHTTPSエンドポイントにPOSTします。',
     webhookSecret: 'Webhookシークレット',
     webhookSecretPlaceholder: 'HMAC-SHA256シークレット（X-WeKnora-Signatureヘッダー）',

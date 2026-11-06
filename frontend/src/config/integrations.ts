@@ -3,11 +3,13 @@ import type { DeploymentCapabilityKey } from './deploymentCapabilities'
 export const CHROME_EXTENSION_URL =
   'https://chromewebstore.google.com/detail/jpemjbopikggjlmikmclgbmkhhopjdgd?utm_source=item-share-cb'
 
-export const CLAWHUB_SKILL_URL = 'https://clawhub.ai/lyingbug/weknora'
-
+// ClawHub 技能卡已随 'claw' tab 移除;ClawHub 作为技能安装注册源(tenant_skill_source)不受影响。
 export type IntegrationTab = 'im' | 'embed' | 'api' | 'mcpserver' | 'cli' | 'chrome' | 'claw'
 
-export const INTEGRATION_TABS: IntegrationTab[] = ['im', 'embed', 'api', 'mcpserver', 'cli', 'chrome', 'claw']
+// Askademic 剪裁(2026-11-06):im/cli/claw 三个 tab 从导航隐藏。
+// im=IM 渠道(教务不用,后端 26787 行保留);cli=教用户安装已删除的 CLI;
+// claw=ClawHub 的 WeKnora 品牌技能卡。恢复=把对应条目加回下面两个数组。
+export const INTEGRATION_TABS: IntegrationTab[] = ['embed', 'api', 'mcpserver', 'chrome']
 
 /** Aligns with Settings.vue SECTION_MIN_ROLE.api and router.go g.Owner() on /api-principal-config. */
 export type IntegrationTabRole = 'viewer' | 'contributor' | 'admin' | 'owner'
@@ -32,11 +34,8 @@ export const INTEGRATION_PREVIEW_ITEMS: Array<{
   key: IntegrationTab
   icon: IntegrationPreviewIcon
 }> = [
-  { key: 'im', icon: { type: 'icon', name: 'chat-message' } },
   { key: 'embed', icon: { type: 'icon', name: 'code' } },
   { key: 'api', icon: { type: 'icon', name: 'secured' } },
   { key: 'mcpserver', icon: { type: 'icon', name: 'tools' } },
-  { key: 'cli', icon: { type: 'icon', name: 'code' } },
   { key: 'chrome', icon: { type: 'icon', name: 'extension' } },
-  { key: 'claw', icon: { type: 'emoji', value: '🦞' } },
 ]

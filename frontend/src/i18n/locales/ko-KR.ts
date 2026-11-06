@@ -6178,7 +6178,7 @@ export default {
     allowFileUpload: '이미지 업로드 버튼 표시',
     allowFileUploadDesc: '활성화하면 방문자 입력창에 이미지 업로드 버튼이 표시됩니다. 연결된 에이전트에서 이미지 업로드가 활성화된 경우에만 버튼이 나타납니다.',
     webhookUrl: 'Webhook URL',
-    webhookUrlPlaceholder: 'https://your-server.example.com/weknora/embed-events',
+    webhookUrlPlaceholder: 'https://your-server.example.com/askademic/embed-events',
     webhookUrlDesc: 'Optional. Askademic POSTs message_sent / message_received events to this HTTPS endpoint.',
     webhookSecret: 'Webhook secret',
     webhookSecretPlaceholder: 'HMAC-SHA256 secret (X-WeKnora-Signature header)',

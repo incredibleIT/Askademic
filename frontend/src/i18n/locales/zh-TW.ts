@@ -6177,7 +6177,7 @@ export default {
     allowFileUpload: '顯示檔案上傳',
     allowFileUploadDesc: '開啟後，訪客可上傳圖片與文件附件。僅當綁定的智慧代理已啟用圖片上傳時才會生效。',
     webhookUrl: 'Webhook 地址',
-    webhookUrlPlaceholder: 'https://your-server.example.com/weknora/embed-events',
+    webhookUrlPlaceholder: 'https://your-server.example.com/askademic/embed-events',
     webhookUrlDesc: '可選。訪客發訊息與助手回覆完成時，Askademic 會向該 HTTPS 地址 POST 事件（message_sent / message_received）。',
     webhookSecret: 'Webhook 簽章金鑰',
     webhookSecretPlaceholder: '用於 HMAC-SHA256 簽章（X-WeKnora-Signature）',

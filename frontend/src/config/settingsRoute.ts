@@ -16,7 +16,8 @@ export function integrationTabFromSection(section: string): IntegrationTab {
   if (INTEGRATION_TABS.includes(raw as IntegrationTab)) {
     return raw as IntegrationTab
   }
-  return 'im'
+  // Askademic 剪裁(2026-11-06):im 已隐藏,未知/隐藏 tab 落第一个可见 tab。
+  return INTEGRATION_TABS[0] ?? 'embed'
 }
 
 export function isIntegrationSection(section: string): boolean {
@@ -38,7 +39,8 @@ function isBareIntegrationTab(section: string): section is IntegrationTab {
  */
 export function normalizeSettingsSection(section: string, tab?: string | null): string {
   if (section === 'integrations') {
-    return integrationSectionKey(integrationTabFromSection(tab || 'im'))
+    // Askademic 剪裁(2026-11-06):im 已从导航隐藏,默认落第一个可见 tab。
+    return integrationSectionKey(integrationTabFromSection(tab || INTEGRATION_TABS[0]))
   }
   if (isBareIntegrationTab(section)) {
     return integrationSectionKey(section)
