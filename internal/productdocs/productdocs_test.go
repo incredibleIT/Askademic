@@ -2,9 +2,6 @@ package productdocs
 
 import (
 	"io/fs"
-	"os"
-	"path/filepath"
-	"regexp"
 	"strings"
 	"testing"
 	"testing/fstest"
@@ -214,7 +211,8 @@ func TestLoadAndSearch(t *testing.T) {
 func TestEmbeddedDocsParseAndLinksResolve(t *testing.T) {
 	lib, err := Default()
 	require.NoError(t, err)
-	require.Greater(t, len(lib.Docs("")), 50)
+	// Askademic 语料为 22 页精编文档,不再要求上游 50+ 页的规模。
+	require.Greater(t, len(lib.Docs("")), 20)
 	for _, cat := range Categories {
 		assert.NotEmpty(t, lib.Docs(cat.Dir), cat.Dir)
 	}
@@ -250,19 +248,10 @@ func TestEmbeddedDocsParseAndLinksResolve(t *testing.T) {
 	}
 }
 
-// Categories must match the site's sidebar groups, and every embedded
-// directory must be one of them, so a new section is neither left out of the
-// index nor labelled differently from the site.
-func TestCategoriesMatchTheSiteAndTheEmbed(t *testing.T) {
-	config, err := os.ReadFile(filepath.Join("..", "..", "website-docs", ".vitepress", "config.mts"))
-	require.NoError(t, err)
-	var site []Category
-	groupRE := regexp.MustCompile(`\{ dir: '([^']+)', label: '([^']+)'`)
-	for _, m := range groupRE.FindAllStringSubmatch(string(config), -1) {
-		site = append(site, Category{Dir: m[1], Label: m[2]})
-	}
-	assert.Equal(t, site, Categories)
-
+// Every embedded directory must be a known category, so a new section is
+// neither left out of the index nor labelled inconsistently.
+// Askademic 剪裁(2026-11-06):文档站(.vitepress/homepage)已移除,不再与站点配置比对。
+func TestCategoriesMatchTheEmbed(t *testing.T) {
 	known := map[string]bool{}
 	for _, c := range Categories {
 		known[c.Dir] = true
