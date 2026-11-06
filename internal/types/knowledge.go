@@ -32,13 +32,6 @@ const (
 	ChannelDingtalk         = "dingtalk"          // DingTalk
 	ChannelSlack            = "slack"             // Slack
 	ChannelIM               = "im"                // Generic IM channel
-	ChannelNotion           = "notion"            // Notion
-	ChannelConfluence       = "confluence"        // Atlassian Confluence
-	ChannelYuque            = "yuque"             // Yuque (语雀)
-	ChannelRSS              = "rss"               // RSS / Atom feed
-	ChannelIMA              = "ima"               // Tencent IMA (ima.qq.com)
-	ChannelSeafile          = "seafile"           // Seafile
-	ChannelNextcloud        = "nextcloud"         // Nextcloud
 )
 
 // Knowledge parse status constants

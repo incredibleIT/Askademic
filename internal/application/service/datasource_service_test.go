@@ -24,7 +24,7 @@ func TestProcessSyncCancelsWhenKnowledgeBaseDeleted(t *testing.T) {
 		ID:              "ds-1",
 		TenantID:        1,
 		KnowledgeBaseID: "kb-deleted",
-		Type:            types.ConnectorTypeRSS,
+		Type:            types.ConnectorTypeDingTalk,
 		Status:          types.DataSourceStatusActive,
 	}
 	dsRepo := newKBDeleteDSRepo("kb-deleted", ds)

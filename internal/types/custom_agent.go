@@ -45,8 +45,12 @@ func GrantsOperationCatalog(agent *CustomAgent) bool {
 // GrantsProductDocs reports whether agent may read the WeKnora documentation
 // bundled with the server. The docs are public, so unlike operations this
 // needs no signed-in user; it is still limited to the built-in assistant.
+//
+// Askademic 剪裁(2026-11-06):隐藏。产品文档工具会导致模型自称"我是 WeKnora",
+// 不再授予任何 agent;语料(website-docs/)与工具代码(internal/agent/tools/
+// product_docs.go、internal/productdocs/)原样保留,恢复=还原下方短路逻辑。
 func GrantsProductDocs(agent *CustomAgent) bool {
-	return agent != nil && agent.IsBuiltin && agent.ID == BuiltinWeKnoraAssistantID
+	return false
 }
 
 // UsesWorkspaceModelFallback reports whether a built-in agent runs without

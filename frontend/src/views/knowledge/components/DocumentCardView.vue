@@ -161,14 +161,9 @@ const channelLabelMap: Record<string, string> = {
   wechat: 'knowledgeBase.channelWechat',
   wecom: 'knowledgeBase.channelWecom',
   feishu: 'knowledgeBase.channelFeishu',
-  gitlab: 'knowledgeBase.channelGitLab',
-  seafile: 'knowledgeBase.channelSeafile',
-  nextcloud: 'knowledgeBase.channelNextcloud',
-  confluence: 'knowledgeBase.channelConfluence',
   dingtalk: 'knowledgeBase.channelDingtalk',
   slack: 'knowledgeBase.channelSlack',
   im: 'knowledgeBase.channelIm',
-  ima: 'knowledgeBase.channelIma',
 };
 
 const getChannelLabel = (channel: string) => {

@@ -532,7 +532,9 @@ func TestWeKnoraAssistantIsAHiddenBuiltinWithOperations(t *testing.T) {
 		require.NotEqual(t, tools.ToolFindOperations, def.Name)
 	}
 
-	require.True(t, types.GrantsProductDocs(agent))
+	// Askademic 剪裁(2026-11-06):产品文档工具已隐藏(GrantsProductDocs 恒 false),
+	// 内置助手不再持有 WeKnora 文档检索工具。
+	require.False(t, types.GrantsProductDocs(agent))
 	require.NotContains(t, agent.Config.AllowedTools, tools.ToolSearchWeKnoraDocs)
 	for _, def := range tools.AvailableToolDefinitions() {
 		require.NotEqual(t, tools.ToolSearchWeKnoraDocs, def.Name)

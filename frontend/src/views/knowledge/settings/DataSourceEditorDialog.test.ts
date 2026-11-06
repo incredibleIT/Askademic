@@ -27,8 +27,8 @@ const flush = async () => {
 async function fixture({
   configured = true,
   create = false,
-  type = 'gitlab',
-  settings = { projects: [{ project_id: '123', paths: [] }] },
+  type = 'feishu',
+  settings = {},
   resources = [],
   dataSource = null,
 }: {
@@ -45,11 +45,11 @@ async function fixture({
   const api = {
     async validateCredentials(type: string, credentials: Record<string, string>) {
       calls.push({ method: 'validateCredentials', args: [type, { ...credentials }] })
-      if (type !== 'confluence' && credentials.access_token !== 'rotated-token') throw new Error('gitlab API /user: status 401')
+      if (credentials.app_secret !== 'rotated-token') throw new Error('feishu API /app: status 401')
     },
     async validateConnection(id: string) {
       calls.push({ method: 'validateConnection', args: [id] })
-      if (storedToken !== 'rotated-token') throw new Error('gitlab API /user: status 401')
+      if (storedToken !== 'rotated-token') throw new Error('feishu API /app: status 401')
     },
     async updateDataSource(id: string, data: any) {
       calls.push({ method: 'updateDataSource', args: [id, JSON.parse(JSON.stringify(data))] })
@@ -57,7 +57,7 @@ async function fixture({
     },
     async putDataSourceCredentials(id: string, credentials: Record<string, string>) {
       calls.push({ method: 'putDataSourceCredentials', args: [id, { ...credentials }] })
-      storedToken = credentials.access_token
+      storedToken = credentials.app_secret
     },
     async createDataSource(data: any) {
       calls.push({ method: 'createDataSource', args: [JSON.parse(JSON.stringify(data))] })
@@ -76,7 +76,7 @@ async function fixture({
   const props = reactive({
     visible: false, kbId: 'kb-one',
     dataSource: create ? null : dataSource || {
-      id: 'source-one', name: 'GitLab', type,
+      id: 'source-one', name: 'Feishu', type,
       credentials: { credentials: { configured } },
       config: { resource_ids: [], settings },
       sync_schedule: '0 0 */6 * * *', sync_mode: 'incremental',
@@ -110,20 +110,20 @@ async function fixture({
   const vm = instance.value
   async function replace(token = 'rotated-token') {
     vm.enterReplaceCredentials()
-    vm.form.config.credentials = { base_url: 'https://gitlab.example.com', access_token: token }
+    vm.form.config.credentials = { app_id: 'cli_xxxx', app_secret: token }
     await nextTick()
   }
   return { vm, calls, warnings, replace, storedToken: () => storedToken, close: () => app.unmount() }
 }
 
-test('rotated GitLab credentials are tested without updating the saved data source', async () => {
+test('rotated Feishu credentials are tested without updating the saved data source', async () => {
   const f = await fixture()
   try {
     await f.replace()
     await f.vm.testConnection()
     assert.equal(f.vm.testResult, 'success')
-    assert.deepEqual(f.calls, [{ method: 'validateCredentials', args: ['gitlab', {
-      base_url: 'https://gitlab.example.com', access_token: 'rotated-token',
+    assert.deepEqual(f.calls, [{ method: 'validateCredentials', args: ['feishu', {
+      app_id: 'cli_xxxx', app_secret: 'rotated-token',
     }] }])
     assert.equal(f.storedToken(), 'expired-token')
   } finally { f.close() }
@@ -137,12 +137,13 @@ test('Next tests the replacement and final save commits credentials before setti
     assert.equal(f.vm.step, 2)
     await f.vm.nextStep()
     assert.equal(f.vm.step, 3)
+    await flush()
     await f.vm.handleSubmit()
     assert.deepEqual(f.calls.map(call => call.method), [
-      'validateCredentials', 'putDataSourceCredentials', 'updateDataSource',
+      'validateCredentials', 'listResources', 'putDataSourceCredentials', 'updateDataSource',
     ])
     assert.equal(f.storedToken(), 'rotated-token')
-    assert.deepEqual(f.calls[2].args[1].config.credentials, {})
+    assert.deepEqual(f.calls[3].args[1].config.credentials, {})
   } finally { f.close() }
 })
 
@@ -181,152 +182,14 @@ test('an existing data source with no saved credentials tests the entered token'
   } finally { f.close() }
 })
 
-test('new GitLab data sources continue to test credentials without persistence', async () => {
+test('new Feishu data sources continue to test credentials without persistence', async () => {
   const f = await fixture({ create: true })
   try {
-    f.vm.selectType(f.vm.connectorDefs.find((def: any) => def.type === 'gitlab'))
+    f.vm.selectType(f.vm.connectorDefs.find((def: any) => def.type === 'feishu'))
     await f.replace()
     await f.vm.testConnection()
     assert.equal(f.vm.testResult, 'success')
     assert.deepEqual(f.calls.map(call => call.method), ['validateCredentials'])
-  } finally { f.close() }
-})
-
-const seafileRepoA = '0f1e2d3c-4b5a-4968-8776-655443322110'
-const seafileRepoB = 'ffffffff-0000-4000-8000-000000000001'
-
-// A lazy Seafile tree: two libraries, one with a folder that holds a file.
-const seafileResources = [
-  { external_id: `${seafileRepoA}:/`, name: 'Docs', type: 'library', has_children: true },
-  { external_id: `${seafileRepoB}:/`, name: 'Design', type: 'library', has_children: true },
-  { external_id: `${seafileRepoA}:/guides`, name: 'guides', type: 'directory', parent_id: `${seafileRepoA}:/`, has_children: true },
-  { external_id: `${seafileRepoA}:/guides/a.pdf`, name: 'a.pdf', type: 'file', parent_id: `${seafileRepoA}:/guides`, has_children: false },
-]
-
-// Opens a new Seafile data source on the picker step with the roots listed.
-async function seafileFixture(resources = seafileResources) {
-  const f = await fixture({ create: true, resources })
-  f.vm.selectType(f.vm.connectorDefs.find((def: any) => def.type === 'seafile'))
-  f.vm.form.config.credentials = { base_url: 'https://seafile.example.com', api_token: 'rotated-token' }
-  f.vm.testResult = 'success'
-  await f.vm.nextStep()
-  await flush()
-  return f
-}
-
-test('Seafile picker lists libraries lazily and shows the library icon', async () => {
-  const f = await seafileFixture()
-  try {
-    assert.equal(f.vm.step, 2)
-    assert.deepEqual(f.calls.map(call => call.method), ['createDataSource', 'listResources'])
-    assert.deepEqual([...f.vm.resources].map((r: any) => r.external_id), [`${seafileRepoA}:/`, `${seafileRepoB}:/`])
-    assert.equal(f.vm.resourceIconName(f.vm.resources[0]), 'root-list')
-    assert.equal(f.vm.resourceTypeLabel('library'), 'datasource.resourceType.library')
-    await f.vm.ensureChildrenLoaded(`${seafileRepoA}:/`)
-    await f.vm.ensureChildrenLoaded(`${seafileRepoA}:/guides`)
-    assert.equal(f.vm.resourceIconName(f.vm.resources.find((r: any) => r.name === 'guides')), 'folder')
-    assert.equal(f.vm.resourceIconName(f.vm.resources.find((r: any) => r.name === 'a.pdf')), 'file')
-  } finally { f.close() }
-})
-
-test('Seafile selection stays within one library until it is cleared', async () => {
-  const f = await seafileFixture()
-  try {
-    await f.vm.ensureChildrenLoaded(`${seafileRepoA}:/`)
-    await f.vm.ensureChildrenLoaded(`${seafileRepoA}:/guides`)
-    f.vm.toggleResource(`${seafileRepoA}:/guides/a.pdf`)
-    f.vm.toggleResource(`${seafileRepoB}:/`)
-    assert.deepEqual([...f.vm.selectedResourceIds], [`${seafileRepoA}:/guides/a.pdf`])
-    assert.deepEqual(f.warnings, ['datasource.seafile.singleLibraryOnly'])
-    // Clearing library A first lets the user pick library B before saving.
-    f.vm.toggleResource(`${seafileRepoA}:/guides/a.pdf`)
-    f.vm.toggleResource(`${seafileRepoB}:/`)
-    assert.deepEqual([...f.vm.selectedResourceIds], [`${seafileRepoB}:/`])
-    assert.equal(f.warnings.length, 1)
-  } finally { f.close() }
-})
-
-test('Seafile requires a selection before the strategy step', async () => {
-  const f = await seafileFixture()
-  try {
-    await f.vm.nextStep()
-    assert.equal(f.vm.step, 2)
-    assert.deepEqual(f.warnings, ['datasource.seafile.selectionRequired'])
-    f.vm.toggleResource(`${seafileRepoA}:/`)
-    await f.vm.nextStep()
-    assert.equal(f.vm.step, 3)
-  } finally { f.close() }
-})
-
-test('Nextcloud declares an app password and requires an explicit root selection', async () => {
-  const f = await fixture({ create: true, resources: [
-    { external_id: '/', name: 'Nextcloud', type: 'directory', has_children: true },
-    { external_id: '/docs', name: 'docs', type: 'directory', parent_id: '/', has_children: true },
-  ] })
-  try {
-    const def = f.vm.connectorDefs.find((def: any) => def.type === 'nextcloud')
-    assert.ok(def?.available)
-    assert.equal(def.fields.find((field: any) => field.key === 'app_password')?.secret, true)
-    assert.deepEqual([...def.fields].map((field: any) => field.key), ['base_url', 'username', 'app_password'])
-    f.vm.selectType(def)
-    f.vm.form.config.credentials = {
-      base_url: 'https://nextcloud.example.com/cloud', username: 'alice', app_password: 'app-password-for-tests',
-    }
-    f.vm.form.config.settings = { include_extensions: '.pdf, .md', exclude_extensions: '.html' }
-    f.vm.step = 2
-    await f.vm.loadResources()
-    await f.vm.nextStep()
-    assert.equal(f.vm.step, 2)
-    assert.deepEqual(f.warnings, ['datasource.nextcloud.selectionRequired'])
-    await f.vm.ensureChildrenLoaded('/')
-    f.vm.toggleResource('/docs')
-    await f.vm.nextStep()
-    assert.equal(f.vm.step, 3)
-    assert.deepEqual([...f.vm.selectedResourceIds], ['/docs'])
-    assert.equal(f.vm.form.config.settings.include_extensions, '.pdf, .md')
-    assert.equal(f.vm.form.config.credentials.include_extensions, undefined)
-  } finally { f.close() }
-})
-
-test('unchecking a Nextcloud root clears saved descendants missing from the lazy tree', async () => {
-  const f = await fixture({ type: 'nextcloud', resources: [
-    { external_id: '/', name: 'Nextcloud', type: 'directory', has_children: true },
-  ], dataSource: {
-    id: 'source-one', name: 'Nextcloud', type: 'nextcloud',
-    credentials: { credentials: { configured: true } },
-    config: { resource_ids: ['/docs/vanished.pdf'], settings: {} },
-  } })
-  try {
-    f.vm.step = 2
-    await f.vm.loadResources()
-    f.vm.toggleResource('/')
-    f.vm.toggleResource('/')
-    assert.deepEqual([...f.vm.selectedResourceIds], [])
-  } finally { f.close() }
-})
-
-test('a vanished saved Seafile selection is cleared by unchecking its library', async () => {
-  const f = await fixture({ resources: seafileResources, dataSource: {
-    id: 'source-one', name: 'Seafile', type: 'seafile',
-    credentials: { credentials: { configured: true } },
-    config: { resource_ids: [`${seafileRepoA}:/guides/vanished.pdf`], settings: {} },
-    sync_schedule: '0 0 */6 * * *', sync_mode: 'incremental',
-    conflict_strategy: 'overwrite', sync_deletions: true,
-  } })
-  try {
-    await f.vm.nextStep()
-    await flush()
-    assert.equal(f.vm.step, 2)
-    assert.deepEqual([...f.vm.selectedResourceIds], [`${seafileRepoA}:/guides/vanished.pdf`])
-    // The stale path is invisible, so library B is refused until A is cleared.
-    f.vm.toggleResource(`${seafileRepoB}:/`)
-    assert.deepEqual(f.warnings, ['datasource.seafile.singleLibraryOnly'])
-    // Checking then unchecking library A sweeps the stale path with it.
-    f.vm.toggleResource(`${seafileRepoA}:/`)
-    f.vm.toggleResource(`${seafileRepoA}:/`)
-    assert.deepEqual([...f.vm.selectedResourceIds], [])
-    f.vm.toggleResource(`${seafileRepoB}:/`)
-    assert.deepEqual([...f.vm.selectedResourceIds], [`${seafileRepoB}:/`])
   } finally { f.close() }
 })
 
@@ -348,44 +211,6 @@ test('the single-library guard leaves Feishu and Lark Drive selections alone', a
       assert.deepEqual(f.warnings, [], type)
     } finally { f.close() }
   }
-})
-
-test('a new Yuque data source adopts the TOC folder layout, but not the filter', async () => {
-  const f = await fixture({ create: true })
-  try {
-    assert.equal(f.vm.form.config.settings.folder_mode, undefined)
-    f.vm.selectType(f.vm.connectorDefs.find((def: any) => def.type === 'yuque'))
-    assert.equal(f.vm.form.config.settings.folder_mode, 'toc')
-    // The layout is a presentation choice; toc_only decides what may enter the
-    // knowledge base, so a new source is deliberately left without it.
-    assert.equal(f.vm.form.config.settings.toc_only, undefined)
-    assert.equal(f.vm.yuqueTOCOnly, false)
-  } finally { f.close() }
-})
-
-test('an existing Yuque data source reports its admission filter', async () => {
-  const f = await fixture({ type: 'yuque', settings: { folder_mode: 'toc', toc_only: true } })
-  try {
-    assert.equal(f.vm.yuqueTOCOnly, true)
-  } finally { f.close() }
-})
-
-test('an existing Yuque data source is never switched to the TOC layout', async () => {
-  const f = await fixture({ type: 'yuque', settings: {} })
-  try {
-    // Opening a source created before this control existed must not inject
-    // folder_mode: the connector default (flat) has to stand, otherwise editing
-    // an unrelated field would silently re-file the whole knowledge base.
-    assert.equal(f.vm.form.config.settings.folder_mode, undefined)
-    assert.equal(f.vm.yuqueFolderMode, 'none')
-  } finally { f.close() }
-})
-
-test('an existing Yuque data source on the TOC layout reports it', async () => {
-  const f = await fixture({ type: 'yuque', settings: { folder_mode: 'toc' } })
-  try {
-    assert.equal(f.vm.yuqueFolderMode, 'toc')
-  } finally { f.close() }
 })
 
 test('a DingTalk data source reports the uploaded-file switch, defaulting to off', async () => {
@@ -417,28 +242,6 @@ test('toggling the DingTalk uploaded-file switch writes the settings key', async
     assert.equal(f.vm.form.config.settings.include_uploaded_files, false)
     // The switch is scoped to DingTalk: no other connector's key is written.
     assert.equal(f.vm.form.config.settings.include_sheets, undefined)
-  } finally { f.close() }
-})
-
-test('Cloud hierarchy limitation stays visible after an empty space expansion', async () => {
-  const f = await fixture()
-  try {
-    f.vm.resources = [{
-      external_id: 'space-1',
-      name: 'Cloud space',
-      type: 'space',
-      has_children: true,
-      metadata: { hierarchy_limitation: 'cloud_top_level_containers' },
-    }]
-    f.vm.expandedResourceIds = new Set(['space-1'])
-    await nextTick()
-    assert.equal(f.vm.visibleTree.some((row: any) => row.noticeAfter), true)
-
-    f.vm.expandedResourceIds = new Set()
-    f.vm.loadedChildrenIds = new Set(['space-1'])
-    f.vm.resources = [{ ...f.vm.resources[0], has_children: false }]
-    await nextTick()
-    assert.equal(f.vm.visibleTree.some((row: any) => row.noticeAfter), true)
   } finally { f.close() }
 })
 
@@ -478,65 +281,8 @@ test('new Feishu sources keep the blocks default and do not leak it to another c
   try {
     f.vm.selectType(f.vm.connectorDefs.find((def: any) => def.type === 'feishu'))
     assert.equal(f.vm.feishuParseMode, 'blocks')
-    f.vm.selectType(f.vm.connectorDefs.find((def: any) => def.type === 'gitlab'))
+    f.vm.selectType(f.vm.connectorDefs.find((def: any) => def.type === 'dingtalk'))
     assert.equal(f.vm.form.config.settings.parse_mode, undefined)
   } finally { f.close() }
 })
 
-
-test('Confluence PAT permits connection testing and saving without Basic credentials', async () => {
-  const f = await fixture({ create: true, configured: false, settings: {} })
-  try {
-    f.vm.selectType(f.vm.connectorDefs.find((def: any) => def.type === 'confluence'))
-    f.vm.form.config.credentials = { edition: 'server', base_url: 'https://confluence.test/wiki', token: 'pat-value' }
-    await nextTick()
-    const fields = f.vm.displayedCredentialFields
-    assert.equal(fields.find((field: any) => field.key === 'token').secret, true)
-    assert.equal(fields.find((field: any) => field.key === 'username').optional, true)
-    assert.equal(fields.find((field: any) => field.key === 'password').optional, true)
-    assert.equal(fields.some((field: any) => field.key === 'api_token'), false)
-    await f.vm.testConnection()
-    assert.equal(f.vm.testResult, 'success')
-    assert.equal(f.calls.find(c => c.method === 'validateCredentials')?.args[1].token, 'pat-value')
-    await f.vm.loadResources()
-    const created = f.calls.find(c => c.method === 'createDataSource')?.args[0]
-    assert.equal(created.config.credentials.token, 'pat-value')
-    assert.equal(created.config.settings.token, undefined)
-    assert.deepEqual(f.warnings, [])
-  } finally { f.close() }
-})
-
-test('Confluence requires Basic credentials without a PAT and hides PAT in Cloud', async () => {
-  const f = await fixture({ type: 'confluence', configured: false, settings: {} })
-  try {
-    f.vm.form.config.credentials = { edition: 'server', base_url: 'https://confluence.test/wiki', token: '  ' }
-    await nextTick()
-    assert.equal(f.vm.displayedCredentialFields.find((field: any) => field.key === 'username').optional, false)
-    assert.equal(f.vm.displayedCredentialFields.find((field: any) => field.key === 'password').optional, false)
-    await f.vm.testConnection()
-    assert.equal(f.calls.some(c => c.method === 'validateCredentials'), false)
-    f.vm.form.config.credentials.edition = 'cloud'
-    f.vm.form.config.credentials.token = 'stale-server-token'
-    await nextTick()
-    assert.deepEqual(Array.from(f.vm.displayedCredentialFields, (field: any) => field.key), ['base_url', 'username', 'api_token'])
-    assert.equal(f.vm.displayedCredentialFields.find((field: any) => field.key === 'username').optional, false)
-  } finally { f.close() }
-})
-
-
-test('Confluence PAT replacement uses the credentials subresource and keeps the token out of settings', async () => {
-  const f = await fixture({ type: 'confluence', settings: { edition: 'server', base_url: 'https://confluence.test/wiki' } })
-  try {
-    f.vm.enterReplaceCredentials()
-    f.vm.form.config.credentials.token = 'replacement-pat'
-    await nextTick()
-    await f.vm.testConnection()
-    assert.equal(f.vm.testResult, 'success')
-    await f.vm.handleSubmit()
-    const replacement = f.calls.find(c => c.method === 'putDataSourceCredentials')
-    assert.equal(replacement?.args[1].token, 'replacement-pat')
-    const update = f.calls.find(c => c.method === 'updateDataSource')?.args[1]
-    assert.deepEqual(update.config.credentials, {})
-    assert.equal(update.config.settings.token, undefined)
-  } finally { f.close() }
-})

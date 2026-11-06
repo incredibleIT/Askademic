@@ -32,7 +32,7 @@ func TestDataSourceScheduleAPIRejectsInvalidCron(t *testing.T) {
 			svc := service.NewDataSourceService(repo, nil, nil, kbSvc, nil, nil, scheduler, nil, nil, nil)
 			ds := &types.DataSource{
 				ID: "ds-schedule", KnowledgeBaseID: "kb-schedule", TenantID: 1,
-				Type: types.ConnectorTypeRSS, Status: types.DataSourceStatusActive,
+				Type: types.ConnectorTypeDingTalk, Status: types.DataSourceStatusActive,
 				SyncSchedule: "0 0 * * * *",
 			}
 			if operation == "resume" {

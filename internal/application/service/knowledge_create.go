@@ -1198,12 +1198,7 @@ func (s *knowledgeService) markKnowledgeEnqueueFailed(ctx context.Context, knowl
 }
 
 func usesSourceIdentityDuplicateCheck(channel string) bool {
-	switch channel {
-	case types.ConnectorTypeGitLab, types.ChannelConfluence, types.ChannelSeafile, types.ChannelNextcloud:
-		return true
-	default:
-		return false
-	}
+	return false
 }
 
 func ensureManualFileName(title string) string {

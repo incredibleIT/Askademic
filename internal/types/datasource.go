@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"log"
-	"strings"
 	"time"
 
 	"github.com/Tencent/WeKnora/internal/utils"
@@ -29,21 +28,7 @@ const (
 	// ConnectorTypeLarkDrive is the Lark (international) Drive mode, the
 	// international counterpart of ConnectorTypeFeishuDrive.
 	ConnectorTypeLarkDrive   = "lark_drive"
-	ConnectorTypeNotion      = "notion"
-	ConnectorTypeConfluence  = "confluence"
-	ConnectorTypeYuque       = "yuque"
-	ConnectorTypeGitHub      = "github"
-	ConnectorTypeGoogleDrive = "google_drive"
-	ConnectorTypeOneDrive    = "onedrive"
 	ConnectorTypeDingTalk    = "dingtalk"
-	ConnectorTypeWebCrawler  = "web_crawler"
-	ConnectorTypeSlack       = "slack"
-	ConnectorTypeIMAP        = "imap"
-	ConnectorTypeRSS         = "rss"
-	ConnectorTypeGitLab      = "gitlab"
-	ConnectorTypeIMA         = "ima"
-	ConnectorTypeSeafile     = "seafile"
-	ConnectorTypeNextcloud   = "nextcloud"
 
 	// Sync modes
 	SyncModeIncremental = "incremental"
@@ -81,7 +66,7 @@ type DataSource struct {
 	// User-friendly name
 	Name string `json:"name"`
 
-	// Connector type (feishu, notion, confluence, etc.)
+	// Connector type (feishu, dingtalk, etc.)
 	Type string `json:"type" gorm:"type:varchar(50);index"`
 
 	// Encrypted configuration (API credentials, tokens, etc.)
@@ -243,38 +228,14 @@ func (d DataSourceConfig) HasCredentials() bool {
 }
 
 // HasConfiguredCredentials reports whether user-facing secret credentials are
-// stored. RSS feed URLs are non-secret configuration (settings); only
-// auth_headers count as credentials for that connector.
+// stored.
 func (d DataSourceConfig) HasConfiguredCredentials(connectorType string) bool {
-	if len(d.Credentials) == 0 {
-		return false
-	}
-	switch connectorType {
-	case ConnectorTypeRSS:
-		raw, ok := d.Credentials["auth_headers"]
-		if !ok {
-			return false
-		}
-		s, ok := raw.(string)
-		return ok && strings.TrimSpace(s) != ""
-	default:
-		return len(d.Credentials) > 0
-	}
+	return len(d.Credentials) > 0
 }
 
 // StripNonSecretCredentials removes non-secret values mistakenly stored in the
 // credentials map before persistence.
 func (d *DataSourceConfig) StripNonSecretCredentials(connectorType string) {
-	if d == nil || d.Credentials == nil {
-		return
-	}
-	switch connectorType {
-	case ConnectorTypeRSS:
-		delete(d.Credentials, "feed_urls")
-		if len(d.Credentials) == 0 {
-			d.Credentials = nil
-		}
-	}
 }
 
 // Resource represents a syncable resource (document, folder, space) from external system

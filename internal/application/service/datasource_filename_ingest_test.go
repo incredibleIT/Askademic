@@ -23,7 +23,7 @@ func TestIngestItem_QuotedFilename(t *testing.T) {
 		ID:              "ds-1",
 		TenantID:        1,
 		KnowledgeBaseID: "kb-1",
-		Type:            types.ChannelNotion,
+		Type:            types.ChannelFeishu,
 	}
 	repo := &filenameKnowledgeRepo{}
 	fileSvc := filesvc.NewLocalFileService(t.TempDir(), "")

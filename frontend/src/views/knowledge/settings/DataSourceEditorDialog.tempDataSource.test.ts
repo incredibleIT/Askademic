@@ -160,11 +160,11 @@ async function fixture({
 test('a load with a usable form creates one paused draft and lists through it', async () => {
   const f = await fixture({ resources: TREE_RESOURCES })
   try {
-    f.vm.form.type = 'notion'
+    f.vm.form.type = 'feishu'
     await f.vm.loadResources()
     assert.equal(f.creates(), 1)
     const payload = f.calls[0].args[0]
-    assert.equal(payload.type, 'notion')
+    assert.equal(payload.type, 'feishu')
     assert.equal(payload.knowledge_base_id, 'kb-one')
     assert.equal(payload.status, 'paused')
     assert.equal(f.vm.tempDsId, 'temp-one')
@@ -208,7 +208,7 @@ test('a load without a connector type sends no request and reports nothing', asy
 test('a load without a knowledge base sends no request and reports nothing', async () => {
   const f = await fixture({ resources: TREE_RESOURCES })
   try {
-    f.vm.form.type = 'notion'
+    f.vm.form.type = 'feishu'
     f.props.kbId = '  '
     await nextTick()
     await f.vm.loadResources()
@@ -226,7 +226,7 @@ test('restoring the parameters lets the same dialog create the draft on the next
     await f.vm.loadResources()
     assert.equal(f.creates(), 0)
 
-    f.vm.form.type = 'notion'
+    f.vm.form.type = 'feishu'
     f.props.kbId = '  '
     await nextTick()
     await f.vm.loadResources()
@@ -247,7 +247,7 @@ test('restoring the parameters lets the same dialog create the draft on the next
 test('two concurrent loads share one draft creation', async () => {
   const f = await fixture({ resources: TREE_RESOURCES })
   try {
-    f.vm.form.type = 'notion'
+    f.vm.form.type = 'feishu'
     // Both loads reach the create before either has an id to show for it; the
     // second must join the first instead of creating a second row.
     await Promise.all([f.vm.loadResources(), f.vm.loadResources()])
@@ -260,7 +260,7 @@ test('two concurrent loads share one draft creation', async () => {
 test('a create that answers without an id is reported and not remembered', async () => {
   const f = await fixture({ resources: TREE_RESOURCES })
   try {
-    f.vm.form.type = 'notion'
+    f.vm.form.type = 'feishu'
     f.state.createResult = { data: {} }
     await f.vm.loadResources()
     assert.equal(f.creates(), 1)
@@ -286,7 +286,7 @@ test('a create that answers without an id is reported and not remembered', async
 test('a failed create is not remembered and is retried', async () => {
   const f = await fixture({ resources: TREE_RESOURCES })
   try {
-    f.vm.form.type = 'notion'
+    f.vm.form.type = 'feishu'
     f.state.createFails = true
     await f.vm.loadResources()
     assert.equal(f.creates(), 1)
@@ -530,7 +530,7 @@ test('a Drive root load in edit mode flushes the new folder token before listing
 test('closing the drawer while the draft create is in flight deletes the row it answers with', async () => {
   const f = await fixture({ resources: TREE_RESOURCES, deferCreates: 1 })
   try {
-    f.vm.form.type = 'notion'
+    f.vm.form.type = 'feishu'
     const load = f.vm.loadResources()
     // The drawer closes before the create answers: tempDsId is still empty, so
     // the close handler has no id to delete and nothing else would clean up.
@@ -553,7 +553,7 @@ test('closing the drawer while the draft create is in flight deletes the row it 
 test('reopening the drawer while a create is in flight gives the new session its own draft', async () => {
   const f = await fixture({ resources: TREE_RESOURCES, deferCreates: 1 })
   try {
-    f.vm.form.type = 'notion'
+    f.vm.form.type = 'feishu'
     const first = f.vm.loadResources()
 
     // Closed and reopened before the create answers, with an empty form: the
@@ -563,7 +563,7 @@ test('reopening the drawer while a create is in flight gives the new session its
     await nextTick()
     f.props.visible = true
     await nextTick()
-    f.vm.form.type = 'notion'
+    f.vm.form.type = 'feishu'
     f.state.createResult = { id: 'temp-two' }
     const second = f.vm.loadResources()
     // Let the abandoned create answer (releasing first rather than awaiting it
