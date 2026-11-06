@@ -221,6 +221,12 @@ func (h *ModelHandler) ListModelProviders(c *gin.Context) {
 	includeURLs := dto.CanViewIntegrationSecrets(ctx)
 	result := make([]ModelProviderDTO, 0, len(vendors))
 	for _, v := range vendors {
+		// Askademic 剪裁(2026-11-06):weknoracloud(腾讯托管云,weknora.weixin.qq.com)
+		// 从厂商目录隐藏——演示不使用,且展示名会泄露上游品牌。凭据存储、
+		// handler 与 provider 定义全部保留;恢复=删掉这个 continue。
+		if v.ID == "weknoracloud" {
+			continue
+		}
 		p := providerDTO(v, backendType, true)
 		if !includeURLs {
 			p.DefaultURLs = nil
