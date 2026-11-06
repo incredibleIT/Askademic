@@ -56,9 +56,6 @@ Claude.md
 configure-ollama.sh
 fix-docker.sh
 
-# WeChat Mini Program local/private configuration
-miniprogram/project.private.config.json
-
 # Staging dir for the Docker sandbox self-check probe (removed after each run)
 .weknora-sandbox-check-*
 
@@ -69,3 +66,7 @@ miniprogram/project.private.config.json
 .superpowers/
 .taste-skill/
 graphify-out/
+
+# Go 本地构建缓存(剪裁验证用,GOPROXY=goproxy.cn)
+.gocache/
+.gopath/
