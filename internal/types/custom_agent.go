@@ -710,12 +710,15 @@ var BuiltinAgentRegistry = map[string]func(uint64) *CustomAgent{}
 // from its global drawer — and should not clutter the tenant's agent picker. They remain
 // fully usable via GetAgentByID because the YAML entries still register them in
 // BuiltinAgentRegistry.
+//
+// Askademic 剪裁(2026-11-06):BuiltinDataAnalystID 亦从此列表移除(用户拍板:
+// 数据分析师卡片从选择器隐藏)。YAML 注册保留,历史会话经 GetAgentByID 仍可用;
+// 恢复=把该 ID 加回本列表。
 var builtinAgentIDsOrdered = []string{
 	BuiltinQuickAnswerID,
 	BuiltinSmartReasoningID,
 	BuiltinWikiResearcherID,
 	BuiltinDeepResearcherID,
-	BuiltinDataAnalystID,
 	BuiltinKnowledgeGraphExpertID,
 	BuiltinDocumentAssistantID,
 }

@@ -152,12 +152,13 @@ const router = createRouter({
           component: () => import("../views/toolbox/Toolbox.vue"),
           meta: { requiresInit: true, requiresAuth: true }
         },
-        {
-          path: "automations/:automationId?",
-          name: "automationList",
-          component: () => import("../views/automation/AutomationList.vue"),
-          meta: { requiresInit: true, requiresAuth: true }
-        },
+        // Askademic 剪裁(2026-11-06):自动化路由隐藏,视图代码保留;恢复=补回本路由
+        // {
+        //   path: "automations/:automationId?",
+        //   name: "automationList",
+        //   component: () => import("../views/automation/AutomationList.vue"),
+        //   meta: { requiresInit: true, requiresAuth: true }
+        // },
         {
           path: "agents",
           name: "agentList",
