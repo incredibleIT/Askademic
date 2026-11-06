@@ -26,7 +26,9 @@ const (
 
 // operationApprovalService is the service name the approval card shows for
 // catalog operations, in place of an MCP server name.
-const operationApprovalService = "WeKnora"
+// Askademic 剪裁(2026-11-06):展示名随品牌;前端 ToolApprovalCard 的 isOperation
+// 判断同步比对 'Askademic',两侧必须一起改。
+const operationApprovalService = "Askademic"
 
 // defaultOperationTimeout bounds a call after approval when the engine did
 // not report its per-tool timeout.

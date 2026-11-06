@@ -14,7 +14,7 @@ const evaluate = (description, serviceName = 'docs-mcp', delegatedTask = '') => 
     props: { description, serviceName, delegatedTask },
     argsText: { value: '{"period":2,"limit":3}' },
     computed: fn => ({ value: fn() }),
-    isOperation: { value: serviceName === 'WeKnora' },
+    isOperation: { value: serviceName === 'Askademic' },
     targetLabel: { value: serviceName + ' › tool' },
     t: (key, params) => key.split('.').pop() + ' ' + JSON.stringify(params),
   },
@@ -64,7 +64,7 @@ test('setting lines render as labeled fields and the title stays the headline', 
   assert.match(styles, /\.prompt-fields \{/)
 })
 
-test('a WeKnora operation asks with its summary and target, and counts move out of labels', () => {
+test('an Askademic operation asks with its summary and target, and counts move out of labels', () => {
   const description = [
     '创建MCP服务',
     '汇率查询 MCP',
@@ -72,7 +72,7 @@ test('a WeKnora operation asks with its summary and target, and counts move out 
     'URL: https://example.com/mcp',
     'Usage instructions (92 characters): 查询汇率',
   ].join('\n')
-  const { descriptionParts, question } = evaluate(description, 'WeKnora')
+  const { descriptionParts, question } = evaluate(description, 'Askademic')
   assert.deepEqual(JSON.parse(JSON.stringify(descriptionParts.value)), {
     head: 'This replaces the stored credentials.',
     fields: [
@@ -88,7 +88,7 @@ test('a WeKnora operation asks with its summary and target, and counts move out 
 })
 
 test('a warning right after the summary is not mistaken for the target', () => {
-  const { descriptionParts, question } = evaluate('Update MCP service\nThis drops existing tools.', 'WeKnora')
+  const { descriptionParts, question } = evaluate('Update MCP service\nThis drops existing tools.', 'Askademic')
   assert.equal(descriptionParts.value.target, '')
   assert.equal(descriptionParts.value.head, 'This drops existing tools.')
   assert.equal(question.value, 'operationQuestionNoTarget {"action":"Update MCP service"}')

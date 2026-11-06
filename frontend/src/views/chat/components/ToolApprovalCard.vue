@@ -183,7 +183,8 @@ const awaitingInDock = computed(() => open.value && props.variant !== 'dock' && 
 const hasArgs = computed(() => argsText.value.trim().length > 0)
 
 // The service name the backend gives its own operations (run_operation).
-const isOperation = computed(() => props.serviceName === 'WeKnora')
+// Askademic 剪裁(2026-11-06):与后端 operationApprovalService 常量一起改的展示名。
+const isOperation = computed(() => props.serviceName === 'Askademic')
 
 // A batch operation ends its description with one "- " line per item it acts
 // on; those render as a list so every item stays visible. "Label: value"
@@ -215,7 +216,7 @@ const descriptionParts = computed(() => {
       ? { label: counted[1], value: match[2], count: counted[2] }
       : { label: match[1], value: match[2] })
   }
-  // A WeKnora operation's description opens with its summary, then the label
+  // An Askademic operation's description opens with its summary, then the label
   // of what it acts on; they make the question instead of the raw operation id.
   let action = ''
   let target = ''
