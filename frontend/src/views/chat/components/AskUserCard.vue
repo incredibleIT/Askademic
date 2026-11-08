@@ -87,7 +87,6 @@ import { MessagePlugin } from 'tdesign-vue-next'
 import { CheckIcon } from 'tdesign-icons-vue-next'
 import { useI18n } from 'vue-i18n'
 import { resolveAgentPrompt } from '@/api/mcp-service'
-import { resolveEmbedAgentPrompt } from '@/api/embed'
 import { resumeSuspendedRunKey } from '@/utils/suspendedRun'
 import { usePromptCountdown } from '@/composables/usePromptCountdown'
 import { markPromptSubmitted, promptSubmission, usePromptDock } from '@/composables/usePromptDock'
@@ -202,22 +201,13 @@ const answerSummary = computed(() => {
   return summarizeAskUserAnswer(question.value, answer)
 })
 
-const embedTarget = () =>
-  props.embeddedMode && props.embedChannelId && props.embedToken && props.embedSessionId
-  && props.embedSessionSig && props.embedVisitorId
-
 const submit = async (decline: boolean) => {
   if (!open.value || submitting.value) return
   if (!decline && !canSubmit.value) return
   const response = decline ? { declined: true } : draft()
   submitting.value = true
   try {
-    const { resumed } = await (embedTarget()
-      ? resolveEmbedAgentPrompt(
-        props.embedChannelId!, props.embedToken!, props.embedSessionId!, props.embedSessionSig!,
-        props.embedVisitorId!, props.pendingId, 'ask_user', response,
-      )
-      : resolveAgentPrompt(props.pendingId, 'ask_user', response))
+    const { resumed } = await resolveAgentPrompt(props.pendingId, 'ask_user', response)
     markPromptSubmitted(props.pendingId, response)
     if (resumed) resumeSuspendedRun?.(props.pendingId)
   } catch (e: any) {

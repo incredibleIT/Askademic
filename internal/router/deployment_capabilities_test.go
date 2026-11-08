@@ -18,7 +18,6 @@ func allDeploymentFeaturesAvailable() handler.DeploymentFeatureAvailability {
 		Organizations: true,
 		Agents:        true,
 		IM:            true,
-		Embed:         true,
 		API:           true,
 		MCP:           true,
 		WebSearch:     true,
@@ -63,12 +62,12 @@ func TestBuildDeploymentCapabilitiesHidesDockerUnlessOptedIn(t *testing.T) {
 
 func TestBuildDeploymentCapabilitiesReflectsMissingRoutes(t *testing.T) {
 	available := allDeploymentFeaturesAvailable()
-	available.Embed = false
+	// Askademic 剪裁(2026-11-06):embed 能力已随 Widget 删除,本测试只验证 MCP。
 	available.MCP = false
 
 	result := handler.BuildDeploymentCapabilities("standard", available)
 
-	for _, key := range []string{"integrations.embed", "settings.mcp"} {
+	for _, key := range []string{"settings.mcp"} {
 		capability := result.Capabilities[key]
 		if capability.Supported {
 			t.Fatalf("%s should be unsupported", key)
@@ -129,8 +128,5 @@ func TestGetDeploymentCapabilitiesHandlerReturnsSnapshot(t *testing.T) {
 	}
 	if body.Code != 0 || body.Data.Edition != "standard" {
 		t.Fatalf("response = %#v", body)
-	}
-	if !body.Data.Capabilities["integrations.embed"].Supported {
-		t.Fatal("embed capability should be returned")
 	}
 }

@@ -51,11 +51,6 @@
                   <span>{{ $t('integrations.tabs.im') }} · {{ agentIMChannelCount }}</span>
                   <t-icon name="chevron-right" size="14px" />
                 </button>
-                <span class="integration-inline__sep" aria-hidden="true">|</span>
-                <button type="button" class="integration-inline__stat integration-inline__link" @click="gotoIntegrations('embed')">
-                  <span>{{ $t('integrations.tabs.embed') }} · {{ agentEmbedChannelCount }}</span>
-                  <t-icon name="chevron-right" size="14px" />
-                </button>
               </div>
             </div>
           </div>
@@ -1929,7 +1924,6 @@ import SettingDrawer from '@/components/settings/SettingDrawer.vue';
 import KBParserSettings, { type ParserEngineRule } from '@/views/knowledge/settings/KBParserSettings.vue';
 import AgentShareSettings from '@/components/AgentShareSettings.vue';
 import { SKILL_ICON } from '@/types/mention';
-import { listEmbedChannels } from '@/api/embed';
 import { ASSISTANT_ACCESS_LEVELS, type AssistantAccessLevel } from '@/api/assistant';
 import { getRootZoom, rectToCssPx } from '@/utils/zoom';
 import { integrationSectionKey } from '@/config/settingsRoute';
@@ -3187,23 +3181,17 @@ watch(currentSection, (section) => {
 });
 
 const agentIMChannelCount = ref(0);
-const agentEmbedChannelCount = ref(0);
 
 async function loadAgentIntegrationCounts(agentId: string) {
   try {
-    const [imResp, embedResp] = await Promise.all([
-      listIMChannels(agentId),
-      listEmbedChannels(agentId),
-    ]);
+    const imResp = await listIMChannels(agentId);
     agentIMChannelCount.value = imResp?.data?.length ?? 0;
-    agentEmbedChannelCount.value = embedResp?.data?.length ?? 0;
   } catch {
     agentIMChannelCount.value = 0;
-    agentEmbedChannelCount.value = 0;
   }
 }
 
-function gotoIntegrations(tab: 'im' | 'embed') {
+function gotoIntegrations(tab: 'im') {
   const agentId = editorAgent.value?.id;
   if (!agentId) return;
   handleClose();
@@ -3808,7 +3796,6 @@ watch(() => props.visible, async (val) => {
     editorInitializing.value = false;
     clearFieldHighlight();
     agentIMChannelCount.value = 0;
-    agentEmbedChannelCount.value = 0;
     showSkillProgress.value = false;
     skillProgressRecord.value = null;
     skillProgressId.value = '';

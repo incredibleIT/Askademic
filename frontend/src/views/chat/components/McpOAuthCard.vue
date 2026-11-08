@@ -53,12 +53,6 @@ import {
   refreshMCPMetadata,
   MCP_OAUTH_CALLBACK_PATH,
 } from '@/api/mcp-service'
-import {
-  cancelEmbedMCPOAuth,
-  getEmbedMCPOAuthAuthorizeURL,
-  getEmbedMCPOAuthStatus,
-  resolveEmbedMCPOAuth,
-} from '@/api/embed'
 import { markPromptSubmitted, promptSubmission, usePromptDock } from '@/composables/usePromptDock'
 import { isSubmitKey } from '@/utils/promptKeys'
 
@@ -83,14 +77,6 @@ const props = defineProps<{
   embedSessionSig?: string
   embedVisitorId?: string
 }>()
-
-const useEmbedOAuth = () =>
-  props.embeddedMode
-  && props.embedChannelId
-  && props.embedToken
-  && props.embedSessionId
-  && props.embedSessionSig
-  && props.embedVisitorId
 
 const { t } = useI18n()
 const dock = usePromptDock()
@@ -174,18 +160,7 @@ const skip = async () => {
   if (props.resolved || canceling.value) return
   canceling.value = true
   try {
-    if (useEmbedOAuth()) {
-      await cancelEmbedMCPOAuth(
-        props.embedChannelId!,
-        props.embedToken!,
-        props.embedSessionId!,
-        props.embedSessionSig!,
-        props.embedVisitorId!,
-        props.pendingId,
-      )
-    } else {
-      await cancelMCPOAuth(props.pendingId)
-    }
+    await cancelMCPOAuth(props.pendingId)
     markPromptSubmitted(props.pendingId, { authorized: false })
   } catch (e: any) {
     const msg = e?.response?.data?.error?.message || e?.message || t('agentStream.mcpOAuth.skipFailed')
@@ -200,23 +175,11 @@ const authorize = async () => {
   authorizing.value = true
   try {
     const redirectUri = window.location.origin + MCP_OAUTH_CALLBACK_PATH
-    const frontendRedirect = useEmbedOAuth()
-      ? window.location.pathname + window.location.search
-      : '/'
-    const authorization = useEmbedOAuth()
-      ? await getEmbedMCPOAuthAuthorizeURL(
-        props.embedChannelId!,
-        props.embedToken!,
-        props.embedSessionId!,
-        props.embedSessionSig!,
-        props.embedVisitorId!,
-        props.serviceId,
-        { redirect_uri: redirectUri, frontend_redirect: frontendRedirect },
-      )
-      : await getMCPOAuthAuthorizeURL(props.serviceId, {
-        redirect_uri: redirectUri,
-        frontend_redirect: frontendRedirect,
-      })
+    const frontendRedirect = '/'
+    const authorization = await getMCPOAuthAuthorizeURL(props.serviceId, {
+      redirect_uri: redirectUri,
+      frontend_redirect: frontendRedirect,
+    })
     if (!authorization.authorizationUrl || !authorization.authorizationAttempt) {
       MessagePlugin.error(t('agentStream.mcpOAuth.startFailed'))
       authorizing.value = false
@@ -227,17 +190,7 @@ const authorize = async () => {
       const closed = !popup || popup.closed
       let ok = false
       try {
-        ok = useEmbedOAuth()
-          ? await getEmbedMCPOAuthStatus(
-            props.embedChannelId!,
-            props.embedToken!,
-            props.embedSessionId!,
-            props.embedSessionSig!,
-            props.embedVisitorId!,
-            props.serviceId,
-            authorization.authorizationAttempt,
-          )
-          : await getMCPOAuthStatus(props.serviceId, authorization.authorizationAttempt)
+        ok = await getMCPOAuthStatus(props.serviceId, authorization.authorizationAttempt)
       } catch {
         /* transient; keep polling */
       }
@@ -245,23 +198,11 @@ const authorize = async () => {
         stopPoll()
         try { popup?.close() } catch { /* cross-origin close may throw */ }
         try {
-          if (useEmbedOAuth()) {
-            await resolveEmbedMCPOAuth(
-              props.embedChannelId!,
-              props.embedToken!,
-              props.embedSessionId!,
-              props.embedSessionSig!,
-              props.embedVisitorId!,
-              props.pendingId,
-              { service_id: props.serviceId, decision: 'authorize' },
-            )
-          } else {
-            await resolveMCPOAuth(props.pendingId, { service_id: props.serviceId, decision: 'authorize' })
-            try {
-              await refreshMCPMetadata(props.serviceId)
-            } catch {
-              /* next describe/list will live-fill this user's directory */
-            }
+          await resolveMCPOAuth(props.pendingId, { service_id: props.serviceId, decision: 'authorize' })
+          try {
+            await refreshMCPMetadata(props.serviceId)
+          } catch {
+            /* next describe/list will live-fill this user's directory */
           }
           markPromptSubmitted(props.pendingId, { authorized: true })
           MessagePlugin.success(t('agentStream.mcpOAuth.authorizedToast'))

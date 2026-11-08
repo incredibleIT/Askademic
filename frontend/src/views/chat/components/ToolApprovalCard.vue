@@ -98,7 +98,6 @@ import { ref, computed, inject, watch } from 'vue'
 import { MessagePlugin } from 'tdesign-vue-next'
 import { useI18n } from 'vue-i18n'
 import { resolveToolApproval } from '@/api/mcp-service'
-import { resolveEmbedToolApproval } from '@/api/embed'
 import { resumeSuspendedRunKey } from '@/utils/suspendedRun'
 import { usePromptCountdown } from '@/composables/usePromptCountdown'
 import { markPromptSubmitted, promptSubmission, usePromptDock } from '@/composables/usePromptDock'
@@ -138,14 +137,6 @@ const props = defineProps<{
   embedSessionSig?: string
   embedVisitorId?: string
 }>()
-
-const useEmbedApproval = () =>
-  props.embeddedMode
-  && props.embedChannelId
-  && props.embedToken
-  && props.embedSessionId
-  && props.embedSessionSig
-  && props.embedVisitorId
 
 const { t } = useI18n()
 const resumeSuspendedRun = inject(resumeSuspendedRunKey, undefined)
@@ -390,27 +381,12 @@ const submit = async (decision: 'approve' | 'reject') => {
         return
       }
     }
-    const { resumed } = await (useEmbedApproval()
-      ? resolveEmbedToolApproval(
-        props.embedChannelId!,
-        props.embedToken!,
-        props.embedSessionId!,
-        props.embedSessionSig!,
-        props.embedVisitorId!,
-        props.pendingId,
-        {
-          decision,
-          modified_args: decision === 'approve' ? modified : undefined,
-          reason: decision === 'reject' ? t('agentStream.toolApproval.userRejected') : undefined,
-          allow_in_session: allowForSession(decision),
-        },
-      )
-      : resolveToolApproval(props.pendingId, {
-        decision,
-        modified_args: decision === 'approve' ? modified : undefined,
-        reason: decision === 'reject' ? t('agentStream.toolApproval.userRejected') : undefined,
-        allow_in_session: allowForSession(decision),
-      }))
+    const { resumed } = await resolveToolApproval(props.pendingId, {
+      decision,
+      modified_args: decision === 'approve' ? modified : undefined,
+      reason: decision === 'reject' ? t('agentStream.toolApproval.userRejected') : undefined,
+      allow_in_session: allowForSession(decision),
+    })
     markPromptSubmitted(props.pendingId, { approved: decision === 'approve' })
     MessagePlugin.success(t('agentStream.toolApproval.submitted'))
     if (resumed) resumeSuspendedRun?.(props.pendingId)

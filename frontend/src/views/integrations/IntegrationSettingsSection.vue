@@ -20,14 +20,7 @@
         <IMChannelPanel v-model:filter-agent-id="filterAgentId" />
       </div>
 
-      <div v-if="tab === 'embed'" class="section">
-        <div class="section-header">
-          <h2>{{ $t('agentEditor.embed.title') }}</h2>
-          <p class="section-description">{{ $t('agentEditor.embed.description') }}</p>
-        </div>
-        <AgentEmbedChannelPanel v-model:filter-agent-id="filterAgentId" />
-      </div>
-
+      <!-- Askademic 剪裁(2026-11-08):embed(网站嵌入)整体移除,tab 从导航摘除 -->
       <div v-if="tab === 'api'" class="section">
         <div class="section-header">
           <h2>{{ $t('integrations.api.title') }}</h2>
@@ -54,7 +47,6 @@
 import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import IMChannelPanel from '@/components/IMChannelPanel.vue'
-import AgentEmbedChannelPanel from '@/components/AgentEmbedChannelPanel.vue'
 import ApiIntegrationSettings from '@/views/integrations/ApiIntegrationSettings.vue'
 import McpServerIntegrationSettings from '@/views/integrations/McpServerIntegrationSettings.vue'
 import ChromeExtensionLanding from '@/views/integrations/ChromeExtensionLanding.vue'

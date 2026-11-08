@@ -91,16 +91,10 @@ export function isStreamAuthError(err: unknown): boolean {
   return (err as { name?: string }).name === 'StreamAuthError'
 }
 
-export function isEmbedPage(): boolean {
-  if (typeof window === 'undefined') return false
-  return window.location.pathname.startsWith(`${getApiBaseUrl()}/embed/`)
-}
-
 export function redirectToLogin() {
   if (typeof window === 'undefined') return
   const loginPath = `${getApiBaseUrl()}/login`
   if (window.location.pathname === loginPath) return
-  if (isEmbedPage()) return
   window.location.href = loginPath
 }
 

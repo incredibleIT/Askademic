@@ -263,7 +263,6 @@ import {
     type SidebarSessionBucket,
 } from './sessionSidebarBuckets';
 import type { SessionForGrouping } from './sessionGrouping';
-import { listAllEmbedChannels } from '@/api/embed/index';
 import {
     classifyDateBucket,
     configuredPlatforms,
@@ -370,7 +369,6 @@ const sessionListBooting = ref(false);
 const currentSecondpath = ref('');
 const scrollContainer = ref<HTMLElement | null>(null);
 const imPlatforms = ref<string[]>([]);
-const embedChannelNames = ref<Record<string, string>>({});
 const activeSessionBucketKey = ref(DEFAULT_SESSION_BUCKET_KEY);
 const sessionListCanScroll = ref(false);
 const visibleChannelBuckets = computed(() =>
@@ -863,9 +861,10 @@ const ensureSessionInSidebar = (sessionId: string) => {
     total.value = flattenBucketItems(sessionBuckets.value, bucketOrder.value).length;
 };
 
+// Askademic 剪裁(2026-11-06):embed 渠道已删,桶定义不再传 embed(模块参数保留)。
 const rebuildBucketDefinitions = () => buildBucketDefinitions(
     imPlatforms.value,
-    embedChannelNames.value,
+    {},
     {
         web: t('menu.myChats'),
         imPlatform: (platform) => t(`agentEditor.im.${platform}`),
@@ -1059,16 +1058,6 @@ const loadSessionOriginMeta = async () => {
         imPlatforms.value = configuredPlatforms(res?.data || []);
     } catch {
         imPlatforms.value = [];
-    }
-    try {
-        const res: any = await listAllEmbedChannels();
-        const names: Record<string, string> = {};
-        for (const ch of res?.data || []) {
-            if (ch?.id && ch?.name) names[ch.id] = ch.name;
-        }
-        embedChannelNames.value = names;
-    } catch {
-        embedChannelNames.value = {};
     }
 };
 

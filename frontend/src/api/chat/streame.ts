@@ -71,7 +71,7 @@ export function useStream() {
   let renderTimer: number | null = null
 
   // 启动流式请求
-  const startStream = async (params: { session_id: any; query: any; knowledge_base_ids?: string[]; knowledge_ids?: string[]; tag_ids?: string[]; agent_enabled?: boolean; agent_id?: string; agent_source_tenant_id?: string | number; web_search_enabled?: boolean; local_browser_enabled?: boolean; summary_model_id?: string; reasoning_effort?: string; mcp_service_ids?: string[]; skill_names?: string[]; mentioned_items?: Array<{id: string; name: string; type: string; kb_type?: string; kb_id?: string; kb_name?: string; service_id?: string; skill_name?: string}>; images?: Array<{data: string}>; attachment_uploads?: Array<{data: string; file_name: string; file_size: number}>; attachment_ids?: string[]; suggestion_attribution?: { suggestion_set_id: string; question_id: string }; question_origin?: { knowledge_base_id: string; knowledge_id?: string }; page_context?: PageContextPayload; assistant_access?: AssistantAccessLevel; method: string; url: string; resume_pending_id?: string; embed_token?: string; embed_session_sig?: string; embed_visitor_id?: string }) => {
+  const startStream = async (params: { session_id: any; query: any; knowledge_base_ids?: string[]; knowledge_ids?: string[]; tag_ids?: string[]; agent_enabled?: boolean; agent_id?: string; agent_source_tenant_id?: string | number; web_search_enabled?: boolean; local_browser_enabled?: boolean; summary_model_id?: string; reasoning_effort?: string; mcp_service_ids?: string[]; skill_names?: string[]; mentioned_items?: Array<{id: string; name: string; type: string; kb_type?: string; kb_id?: string; kb_name?: string; service_id?: string; skill_name?: string}>; images?: Array<{data: string}>; attachment_uploads?: Array<{data: string; file_name: string; file_size: number}>; attachment_ids?: string[]; suggestion_attribution?: { suggestion_set_id: string; question_id: string }; question_origin?: { knowledge_base_id: string; knowledge_id?: string }; page_context?: PageContextPayload; assistant_access?: AssistantAccessLevel; method: string; url: string; resume_pending_id?: string }) => {
     const myGeneration = ++streamGeneration
     const streamAbort = controller
     // 重置状态
@@ -83,8 +83,7 @@ export function useStream() {
     // 获取API配置
     const apiUrl = getApiBaseUrl();
     
-    const embedToken = params.embed_token;
-    const token = embedToken || localStorage.getItem('weknora_token');
+    const token = localStorage.getItem('weknora_token');
     if (!token) {
       error.value = i18n.global.t('error.tokenNotFound');
       stopStream();
@@ -114,7 +113,7 @@ export function useStream() {
     let reconnectAttempts = 0;
     let streamMethod = params.method;
     // Never repeat an accepted POST: recovery attaches to its persisted message.
-    const canReconnect = () => !embedToken && receivedAssistantId && !receivedTerminal &&
+    const canReconnect = () => receivedAssistantId && !receivedTerminal &&
       (params.url === '/api/v1/agent-chat' || params.url === '/api/v1/sessions/continue-stream') &&
       myGeneration === streamGeneration && !streamAbort.signal.aborted;
 
@@ -203,7 +202,7 @@ export function useStream() {
       if (params.assistant_access) {
         postBody.assistant_access = params.assistant_access;
       }
-      postBody.channel = embedToken ? "embed" : "web";
+      postBody.channel = "web";
 
       lastStreamRequest.value = {
         requestId: requestID,
@@ -237,12 +236,10 @@ export function useStream() {
         method: streamMethod,
         headers: {
           "Content-Type": "application/json",
-          "Authorization": embedToken ? `Embed ${embedToken}` : `Bearer ${authToken}`,
+          "Authorization": `Bearer ${authToken}`,
           "Accept-Language": i18n.global.locale?.value || localStorage.getItem('locale') || 'zh-CN',
           "X-Request-ID": requestID,
-          ...(!embedToken && tenantIdHeader ? { "X-Tenant-ID": tenantIdHeader } : {}),
-          ...(params.embed_session_sig ? { "X-Embed-Session": params.embed_session_sig } : {}),
-          ...(params.embed_visitor_id ? { "X-Embed-Visitor": params.embed_visitor_id } : {}),
+          ...(tenantIdHeader ? { "X-Tenant-ID": tenantIdHeader } : {}),
         },
         body:
           streamMethod == "POST"
@@ -309,7 +306,7 @@ export function useStream() {
           await runStreamWithAuthRetry({
             run: runStream,
             initialToken: token,
-            isEmbed: Boolean(embedToken),
+            isEmbed: false,
             isCurrent: () => myGeneration === streamGeneration && !streamAbort.signal.aborted,
             refreshAccessToken: () => refreshAccessTokenShared({
               messages: {

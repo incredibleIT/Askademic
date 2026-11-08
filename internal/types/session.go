@@ -77,6 +77,11 @@ type ContextConfig struct {
 // SessionKindAssistant keeps assistant conversations out of ordinary chat listings.
 const SessionKindAssistant = "assistant"
 
+// EmbedSessionMarkerPrefix tags sessions created through an embed channel.
+// Askademic 剪裁(2026-11-06):嵌入 Widget 已整体移除,此标记仅作为历史数据
+// 的隔离标记保留(会话列表排除/管理员可见性判定引用它);演示库中不存在此类行。
+const EmbedSessionMarkerPrefix = "embed_channel:"
+
 // SessionKindAgentDelegated retains a child transcript outside ordinary listings.
 const SessionKindAgentDelegated = "agent_delegated"
 

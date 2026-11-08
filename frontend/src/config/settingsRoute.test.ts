@@ -57,20 +57,22 @@ test('settings nav writes section, and keeps a system-settings panel only there'
 
 test('legacy api / integrations / bare-tab query strings normalize to nav keys', () => {
   assert.equal(normalizeSettingsSection('api'), 'integration-api')
-  // Askademic 剪裁(2026-11-06):im/cli/claw 已从导航隐藏——裸 tab 名不再映射
-  // 到 integration-*;隐藏 tab 的旧书签/integrations 默认落第一个可见 tab。
+  // Askademic 剪裁(2026-11-06/11-08):im/cli/claw 已隐藏,embed 已删除——裸 tab 名
+  // 不再映射到 integration-*;旧书签/integrations 默认落第一个可见 tab(api)。
   assert.equal(normalizeSettingsSection('claw'), 'claw')
   assert.equal(normalizeSettingsSection('cli'), 'cli')
+  assert.equal(normalizeSettingsSection('embed'), 'embed')
   assert.equal(normalizeSettingsSection('mcpserver'), 'integration-mcpserver')
   // 'mcp' is the MCP-client settings page, not the MCP server integration tab.
   assert.equal(normalizeSettingsSection('mcp'), 'mcp')
-  assert.equal(normalizeSettingsSection('integrations', 'cli'), 'integration-embed')
-  assert.equal(normalizeSettingsSection('integrations', 'embed'), 'integration-embed')
-  assert.equal(normalizeSettingsSection('integrations'), 'integration-embed')
+  assert.equal(normalizeSettingsSection('integrations', 'cli'), 'integration-api')
+  assert.equal(normalizeSettingsSection('integrations', 'embed'), 'integration-api')
+  assert.equal(normalizeSettingsSection('integrations'), 'integration-api')
   assert.equal(normalizeSettingsSection('integration-chrome'), 'integration-chrome')
   assert.equal(normalizeSettingsSection('system-global'), 'system-global')
   assert.equal(isIntegrationSection('integration-chrome'), true)
   assert.equal(isIntegrationSection('integration-cli'), false)
+  assert.equal(isIntegrationSection('integration-embed'), false)
   assert.equal(isIntegrationSection('models'), false)
   assert.equal(isIntegrationSection('integration-unknown'), false)
 })

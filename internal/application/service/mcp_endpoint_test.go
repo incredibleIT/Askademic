@@ -61,10 +61,26 @@ func (r *stubMCPEndpointRepo) Delete(_ context.Context, tenantID uint64, id stri
 	return nil
 }
 
+// stubAgentForMCPEndpoint replaces the interfaces.CustomAgentService with a
+// fixed agent; Askademic 剪裁(2026-11-06):原 stubAgentForEmbed 定义在被删的
+// embed 测试里,迁入本文件并更名。
+type stubAgentForMCPEndpoint struct {
+	interfaces.CustomAgentService
+	agent *types.CustomAgent
+	err   error
+}
+
+func (s *stubAgentForMCPEndpoint) GetAgentByID(_ context.Context, _ string) (*types.CustomAgent, error) {
+	if s.err != nil {
+		return nil, s.err
+	}
+	return s.agent, nil
+}
+
 func newMCPEndpointServiceForTest(repo *stubMCPEndpointRepo, agent *types.CustomAgent) *mcpEndpointService {
 	return &mcpEndpointService{
 		repo:         repo,
-		agentService: &stubAgentForEmbed{agent: agent},
+		agentService: &stubAgentForMCPEndpoint{agent: agent},
 	}
 }
 
