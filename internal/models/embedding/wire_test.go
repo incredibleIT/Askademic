@@ -410,6 +410,14 @@ func TestEmbeddingWireFormatPerVendor(t *testing.T) {
 			wantBody: arkBody("doubao-embedding-vision-251215", "a", map[string]any{"encoding_format": "float"}),
 		},
 		{
+			// Askademic(2026-11-08):Coding 入口(/api/coding/v3)的模型行
+			// 保留自己的前缀,向量请求落在该入口的 multimodal 面。
+			name: "volcengine coding entry keeps its prefix", provider: "volcengine",
+			model: "doubao-embedding-vision", base: "/api/coding/v3", wantRequests: 3,
+			wantPath: "/api/coding/v3/embeddings/multimodal", wantAuth: [2]string{"Authorization", "Bearer k"},
+			wantBody: arkBody("doubao-embedding-vision", "a", map[string]any{"encoding_format": "float"}),
+		},
+		{
 			name: "volcengine retired text models keep their own endpoint", provider: "volcengine",
 			model: "doubao-embedding-text-240715", base: "/api/v3/embeddings/multimodal", override: true,
 			wantPath: "/api/v3/embeddings", wantAuth: [2]string{"Authorization", "Bearer k"},

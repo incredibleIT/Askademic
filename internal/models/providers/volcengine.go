@@ -186,14 +186,25 @@ func newVolcengineProvider() *Definition {
 		// Embedding rows have stored three shapes of base URL: the full
 		// multimodal URL that was the default, .../api/v3 like chat, and the
 		// bare host. All of them name the same service, so the request is
-		// placed from the host.
+		// placed from the host. Askademic(2026-11-08):截断从 "/api/" 收窄为
+		// "/api/v3"——火山新增的 Coding 入口(/api/coding/v3)对 embedding 同样
+		// 开放 multimodal 向量面,显式配了该入口的行必须保留自己的前缀,
+		// 否则会被静默改道到未必开通的标准入口。
 		Endpoint: func(r EndpointRequest) (string, map[string]string) {
 			if r.ModelType != types.ModelTypeEmbedding {
 				return "", nil
 			}
 			root := strings.TrimRight(r.BaseURL, "/")
-			if i := strings.Index(root, "/api/"); i >= 0 {
+			if i := strings.Index(root, "/api/v3"); i >= 0 {
 				root = root[:i]
+			}
+			// Askademic(2026-11-08):Coding 入口(/api/coding/v3)的 multimodal
+			// 面挂在自身前缀下(实测 /api/coding/v3/embeddings/multimodal)。
+			if strings.Contains(root, "/api/coding") {
+				if r.EmbeddingAPI == api.EmbeddingOpenAI {
+					return root + "/embeddings", nil
+				}
+				return root + "/embeddings/multimodal", nil
 			}
 			if r.EmbeddingAPI == api.EmbeddingOpenAI {
 				// The retired doubao-embedding text models, whose archived
