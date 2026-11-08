@@ -423,7 +423,8 @@ const navGroups = computed<NavGroup[]>(() => {
     {
       key: 'models_runtime',
       label: t('settings.navGroups.modelsRuntime'),
-      items: pickItems(['models', 'ollama', 'weknoracloud']),
+      // Askademic 剪裁(2026-11-08):ollama/weknoracloud 入口隐藏(代码保留)。
+    items: pickItems(['models']),
     },
     {
       key: 'integrations',
