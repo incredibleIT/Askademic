@@ -9,6 +9,7 @@ import (
 	"slices"
 	"strings"
 
+	"github.com/Tencent/WeKnora/internal/academic"
 	"github.com/Tencent/WeKnora/internal/agent"
 	"github.com/Tencent/WeKnora/internal/agent/approval"
 	"github.com/Tencent/WeKnora/internal/agent/operations"
@@ -1452,6 +1453,9 @@ func (s *agentService) registerTools(
 		switch toolName {
 		case tools.ToolThinking:
 			toolToRegister = tools.NewSequentialThinkingTool()
+		case tools.ToolAcademicDB:
+			// 教务库未初始化时注册 nil 工具：Execute 会返回明确的引导文案。
+			toolToRegister = tools.NewAcademicDBTool(academic.Default())
 		case tools.ToolTodoWrite:
 			toolToRegister = tools.NewTodoWriteTool()
 		case tools.ToolAskUser:
