@@ -61,7 +61,8 @@ func Seed(ctx context.Context, s *Store, opts SeedOptions) error {
 	db := s.DB()
 	// 幂等：清空后重灌（顺序不敏感，直接全清）。
 	for _, table := range []string{
-		TableGrade, TableEnrollment, TableTeachingClassTeacher, TableTeachingClass,
+		// academic_identity 引用人员表，必须最先清；其余按引用方向清空。
+		TableAcademicIdentity, TableGrade, TableEnrollment, TableTeachingClassTeacher, TableTeachingClass,
 		TableCourse, TableStatusChange, TableGraduationAudit, TableProgramRequirement,
 		TableStudent, TableClass, TableTeacher, TableCounselor, TableMajor, TableDepartment,
 	} {
