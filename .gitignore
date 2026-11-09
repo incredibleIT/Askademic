@@ -70,3 +70,13 @@ graphify-out/
 # Go 本地构建缓存(剪裁验证用,GOPROXY=goproxy.cn)
 .gocache/
 .gopath/
+
+# 任务过程文档(本地保留,永不入库):剪裁台账/状态报告/调研/设计规格与计划
+/docs/ACADEMIC_FRONTEND_E2E_REPORT.md
+/docs/ACADEMIC_FRONTEND_STATUS.md
+/docs/ACADEMIC_TRIM_LOG.md
+/docs/ASKADEMIC_DESIGN_STATUS.md
+/docs/ASKADEMIC_INTRO_RESEARCH.md
+/docs/BROWNFIELD_ANALYSIS.md
+/docs/superpowers/
+/WeKnora功能盘点.md
