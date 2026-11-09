@@ -18,7 +18,6 @@
  * Askademic 开场动画「破土问学」。
  * 字母如苗齐升 → 双叶与 i 芽展开 → 引证线划过 → 上浮交还页面。
  * 每会话一次(sessionStorage)；点击任意处跳过；prefers-reduced-motion 呈现完整静态字标。
- * 概念与规格见 docs/ASKADEMIC_INTRO_RESEARCH.md。
  */
 import { ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'

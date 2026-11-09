@@ -93,15 +93,13 @@ flowchart LR
 ├── internal/            # Go 后端（handler / application / models / agent …）
 ├── frontend/            # Vue 3 前端
 ├── config/              # 内置智能体等 YAML 配置
-├── docs/                # 设计文档、开发过程台账、部署脚本说明
+├── docs/                # 架构与部署说明、README 图片素材
 └── docker-compose.yml   # 完整编排（app / frontend / postgres / redis / docreader …）
 ```
 
 ## 开发文档
 
-- [`docs/ACADEMIC_TRIM_LOG.md`](docs/ACADEMIC_TRIM_LOG.md) —— 基于上游的二开过程台账（裁剪决策与执行记录）
-- [`docs/superpowers/specs/`](docs/superpowers/specs/) —— 教务助手设计文档
-- [`docs/superpowers/plans/`](docs/superpowers/plans/) —— 分阶段实施计划
+产品、部署、API 与开发文档见 [`website-docs/`](website-docs/README.md)；其中的[剪裁说明](website-docs/06-development/03-trim-notes.md)概述了本项目对上游的裁剪原则与边界。内部过程文档（剪裁台账、设计规格等）由维护者本地保留，不随本仓库分发。
 
 ## 开源来源与致谢
 
