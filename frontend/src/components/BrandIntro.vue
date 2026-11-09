@@ -30,11 +30,10 @@ const { t } = useI18n()
 const visible = ref(BRAND.introEnabled && !sessionStorage.getItem('askademic_intro_played'))
 const stageRef = ref<HTMLElement | null>(null)
 const citeRef = ref<HTMLElement | null>(null)
+// 字标资产已自带 data-unit(字母组)与 data-leaf(叶组)钩子;mask id 全局唯一无需改名
 const markSvg = darkMarkRaw
   .replace(/^[\s\S]*?<svg[^>]*>/, '')
-  .replace(/<\/?svg>\s*$/,'')
-  .replace(/wmDarkMask/g, 'askIntroMask')
-  .replace(/<g(?! data-unit)(?=[^>]*>)/, '<g data-leaf$1')
+  .replace(/<\/svg>\s*$/, '')
 
 let done = false
 
