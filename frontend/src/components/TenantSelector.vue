@@ -72,7 +72,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch, onUnmounted, nextTick } from 'vue'
 import { useAuthStore } from '@/stores/auth'
-import { searchTenants, type TenantInfo } from '@/api/tenant'
+import { searchTenants, listMyWorkspaces, type TenantInfo } from '@/api/tenant'
 import { useI18n } from 'vue-i18n'
 import { MessagePlugin } from 'tdesign-vue-next'
 import {
@@ -209,6 +209,32 @@ const loadTenants = async (append = false) => {
 
   loading.value = true
   try {
+    // 非跨空间超管走 my-workspaces：/tenants/search 只对
+    // can_access_all_tenants 用户开放，普通用户（如带多个班级的
+    // 教师）会被它 403。my-workspaces 只返回自己是 active 成员的
+    // 空间；前端关键词过滤即可覆盖搜索框场景。
+    if (!authStore.canAccessAllTenants) {
+      const response = await listMyWorkspaces()
+      if (response.success && response.data) {
+        const keyword = searchQuery.value.trim()
+        const items: TenantInfo[] = response.data.items.map((it) => ({
+          id: it.id,
+          name: it.name,
+          status: 'active',
+          created_at: '',
+          updated_at: ''
+        })).filter((it) =>
+          !keyword || it.name.includes(keyword) || String(it.id).includes(keyword)
+        )
+        tenants.value = append ? [...tenants.value, ...items] : items
+        total.value = tenants.value.length
+        authStore.setAllTenants(tenants.value)
+      } else {
+        MessagePlugin.error(response.message || t('tenant.loadTenantsFailed'))
+      }
+      return
+    }
+
     const keyword = searchQuery.value.trim()
     let tenantID: number | undefined = undefined
 

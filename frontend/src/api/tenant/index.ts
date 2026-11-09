@@ -358,3 +358,36 @@ export async function searchTenants(params: SearchTenantsParams = {}): Promise<S
     }
   }
 }
+
+/**
+ * 我的空间列表（GET /api/v1/auth/my-workspaces）
+ *
+ * 与 searchTenants(/tenants/search, 跨空间超管专用)不同：
+ * 本接口只返回调用者是 active 成员的空间，普通用户（例如带多个
+ * 班级的教师）用它完成空间切换。
+ */
+export interface MyWorkspaceItem {
+  id: number
+  name: string
+  role: string
+}
+
+export interface MyWorkspacesResponse {
+  success: boolean
+  data?: {
+    items: MyWorkspaceItem[]
+  }
+  message?: string
+}
+
+export async function listMyWorkspaces(): Promise<MyWorkspacesResponse> {
+  try {
+    const response = await get('/api/v1/auth/my-workspaces')
+    return response as unknown as MyWorkspacesResponse
+  } catch (error: any) {
+    return {
+      success: false,
+      message: error.message || t('error.tenant.searchFailed')
+    }
+  }
+}

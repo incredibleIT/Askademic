@@ -210,7 +210,12 @@ func RegisterMyEnvVarRoutes(r *gin.RouterGroup, h *handler.MeEnvVarHandler) {
 }
 
 // RegisterAuthRoutes registers authentication routes
-func RegisterAuthRoutes(r *gin.RouterGroup, handler *handler.AuthHandler, g *rbacGuards) {
+func RegisterAuthRoutes(
+	r *gin.RouterGroup,
+	handler *handler.AuthHandler,
+	myWorkspacesHandler *handler.MyWorkspacesHandler,
+	g *rbacGuards,
+) {
 	r.POST("/auth/register", handler.Register)
 	// Share-link surfaces are unauthenticated and accept a plaintext
 	// token from the caller; rate-limit by IP to bound brute-force /
@@ -224,6 +229,11 @@ func RegisterAuthRoutes(r *gin.RouterGroup, handler *handler.AuthHandler, g *rba
 	r.POST("/auth/auto-setup", handler.AutoSetup)
 	r.GET("/auth/config", handler.GetAuthConfig)
 	r.POST("/auth/switch-tenant", handler.SwitchTenant)
+	// 普通用户可见自己的空间列表（教师带多个班级空间的切换依赖它）；
+	// 与 /tenants/search(跨空间超管)不同，这里只读调用者本人的成员关系。
+	if myWorkspacesHandler != nil {
+		r.GET("/auth/my-workspaces", g.Viewer(), myWorkspacesHandler.ListMyWorkspaces)
+	}
 	r.GET("/auth/oidc/config", handler.GetOIDCConfig)
 	r.GET("/auth/oidc/url", handler.GetOIDCAuthorizationURL)
 	r.GET("/auth/oidc/callback", handler.OIDCRedirectCallback)
