@@ -1,5 +1,8 @@
 <template>
   <div class="login-page">
+    <!-- Askademic 开场动画「破土问学」:每会话一次,点击跳过 -->
+    <BrandIntro />
+
     <!-- 语言切换（功能保留自旧版，位置固定右上） -->
     <div class="lang-switch language-switch">
       <button @click="toggleLanguageMenu" class="header-link" :title="currentLangOption?.label">
@@ -204,6 +207,7 @@ import {
 import { useAuthStore } from '@/stores/auth'
 import BrandWordmark from '@/components/BrandWordmark.vue'
 import { useI18n } from 'vue-i18n'
+import BrandIntro from '@/components/BrandIntro.vue'
 import { getApiBaseUrl } from '@/utils/api-base'
 import { BRAND } from '@/config/brand'
 

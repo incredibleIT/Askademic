@@ -1,4 +1,8 @@
 export default {
+  brandIntro: {
+    ariaLabel: 'Аскадемик интро: логотип растёт как росток, листья раскрываются',
+    skip: 'Пропустить',
+  },
   documentProgress: {
     "queueView": "Задачи очереди",
     "title": "Прогресс документов и Wiki",

@@ -12,4 +12,6 @@ export const BRAND = {
   tagline: '校园教务智能问答 · 回答有据可查',
   /** 部署单位（演示环境占位，上线前替换为真实校名） */
   org: 'XX大学',
+  /** 开场动画开关（每会话一次；答辩演示可随时关闭） */
+  introEnabled: true,
 } as const

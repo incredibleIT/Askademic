@@ -1,4 +1,8 @@
 export default {
+  brandIntro: {
+    ariaLabel: 'Askademic 인트로: 워드마크가 새싹처럼 자라 잎이 펼쳐집니다',
+    skip: '건너뛰기',
+  },
   documentProgress: {
     "queueView": "큐 작업",
     "title": "자료 및 Wiki 진행 상황",

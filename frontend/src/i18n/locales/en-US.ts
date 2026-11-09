@@ -1,4 +1,8 @@
 export default {
+  brandIntro: {
+    ariaLabel: 'Askademic intro: the wordmark grows like a sprout, leaves unfold',
+    skip: 'Skip',
+  },
   documentProgress: {
     "queueView": "Queue tasks",
     "title": "Document and Wiki progress",

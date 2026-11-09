@@ -1,4 +1,8 @@
 export default {
+  brandIntro: {
+    ariaLabel: 'Askademic オープニング:ロゴが芽のように伸び、葉が開きます',
+    skip: 'スキップ',
+  },
   documentProgress: {
     "queueView": "キュータスク",
     "title": "資料と Wiki の進捗",

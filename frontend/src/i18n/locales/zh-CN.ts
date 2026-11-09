@@ -1,4 +1,8 @@
 export default {
+  brandIntro: {
+    ariaLabel: 'Askademic 开场动画:字标如苗生长,双叶展开',
+    skip: '跳过',
+  },
   documentProgress: {
     "queueView": "队列任务",
     "title": "资料与 Wiki 进度",
