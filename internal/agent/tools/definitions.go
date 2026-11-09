@@ -169,6 +169,7 @@ func AvailableToolDefinitions() []AvailableTool {
 		{Name: ToolWikiUpdateIssue, Label: "更新Wiki问题状态", Description: "更新特定的Wiki页面问题状态", Group: ToolGroupWikiIssue},
 		{Name: ToolDataAnalysis, Label: "数据分析", Description: "理解数据文件并进行数据分析", Group: ToolGroupData},
 		{Name: ToolDataSchema, Label: "查看数据元信息", Description: "获取表格文件的元信息", Group: ToolGroupData},
+		{Name: ToolAcademicDB, Label: "教务数据", Description: "查询教务数据（成绩、学分、班级），按角色返回属于你的数据", Group: ToolGroupData},
 	}
 }
 

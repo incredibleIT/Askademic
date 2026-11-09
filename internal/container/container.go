@@ -36,6 +36,7 @@ import (
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 
+	"github.com/Tencent/WeKnora/internal/academic"
 	"github.com/Tencent/WeKnora/internal/agent/approval"
 	"github.com/Tencent/WeKnora/internal/agent/hitl"
 	"github.com/Tencent/WeKnora/internal/agent/operations"
@@ -119,6 +120,11 @@ func BuildContainer(container *dig.Container) *dig.Container {
 	}
 	ctx := context.Background()
 	logger.Debugf(ctx, "[Container] Starting container initialization...")
+
+	// 教务库（独立 SQLite）：启动时软初始化，失败不阻断应用，工具会返回明确错误。
+	if err := academic.InitFromEnv(); err != nil {
+		logger.Warnf(ctx, "[academic] 教务库未初始化: %v", err)
+	}
 
 	// Register resource cleaner for proper cleanup of resources
 	must(container.Provide(NewResourceCleaner, dig.As(new(interfaces.ResourceCleaner))))
