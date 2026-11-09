@@ -16,6 +16,8 @@ const (
 	BuiltinQuickAnswerID = "builtin-quick-answer"
 	// BuiltinSmartReasoningID is the ID for the built-in smart reasoning (ReAct) agent
 	BuiltinSmartReasoningID = "builtin-smart-reasoning"
+	// AcademicAssistantID is the ID for the built-in academic assistant agent
+	AcademicAssistantID = "academic-assistant"
 	// BuiltinDeepResearcherID is the ID for the built-in deep researcher agent
 	BuiltinDeepResearcherID = "builtin-deep-researcher"
 	// BuiltinDataAnalystID is the ID for the built-in data analyst agent
@@ -717,6 +719,7 @@ var BuiltinAgentRegistry = map[string]func(uint64) *CustomAgent{}
 var builtinAgentIDsOrdered = []string{
 	BuiltinQuickAnswerID,
 	BuiltinSmartReasoningID,
+	AcademicAssistantID,
 	BuiltinWikiResearcherID,
 	BuiltinDeepResearcherID,
 	BuiltinKnowledgeGraphExpertID,
