@@ -2,21 +2,21 @@ package academic
 
 // 教务库全部表名常量。除本包外，任何代码不得拼接这些标识符。
 const (
-	TableDepartment            = "department"
-	TableMajor                 = "major"
-	TableCounselor             = "counselor"
-	TableClass                 = "class"
-	TableTeacher               = "teacher"
-	TableCourse                = "course"
-	TableTeachingClass         = "teaching_class"
-	TableTeachingClassTeacher  = "teaching_class_teacher"
-	TableStudent               = "student"
-	TableEnrollment            = "enrollment"
-	TableGrade                 = "grade"
-	TableProgramRequirement    = "program_requirement"
-	TableGraduationAudit       = "graduation_audit"
-	TableStatusChange          = "status_change"
-	TableAcademicIdentity      = "academic_identity"
+	TableDepartment           = "department"
+	TableMajor                = "major"
+	TableCounselor            = "counselor"
+	TableClass                = "class"
+	TableTeacher              = "teacher"
+	TableCourse               = "course"
+	TableTeachingClass        = "teaching_class"
+	TableTeachingClassTeacher = "teaching_class_teacher"
+	TableStudent              = "student"
+	TableEnrollment           = "enrollment"
+	TableGrade                = "grade"
+	TableProgramRequirement   = "program_requirement"
+	TableGraduationAudit      = "graduation_audit"
+	TableStatusChange         = "status_change"
+	TableAcademicIdentity     = "academic_identity"
 )
 
 // 表结构对齐设计文档 §7.1（teaching_class_teacher 为 §7.4 补充的合上关联表；
