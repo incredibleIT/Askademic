@@ -121,6 +121,9 @@ var toolHandlePolicies = map[string]toolHandlePolicy{
 	toolDataAnalysis: {
 		sourceIDKeys: map[string]struct{}{"knowledge_id": {}},
 	},
+	// academic_db 的输出是纯文本表格（物化视图查询结果），不携带任何
+	// source handle；数据权限由 internal/academic 的物化 WHERE 保证。
+	"academic_db": {},
 	"data_schema": {
 		sourceIDKeys: map[string]struct{}{"knowledge_id": {}},
 	},
