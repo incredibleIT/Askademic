@@ -67,3 +67,30 @@ func TestSeedCoversEveryRoleSituation(t *testing.T) {
 		}
 	}
 }
+
+func TestSeedLinksCounselorToEveryClass(t *testing.T) {
+	// 回归: 辅导员回填曾因遍历 map 取错变量(班名当 id)而静默 0 行更新,
+	// 导致 class.counselor_id 全 NULL, 辅导员身份绑定无从谈起。
+	s := newTestStore(t)
+	if err := Seed(context.Background(), s, SeedOptions{RNGSeed: 5, StudentsPerClass: 3, Terms: 1, Rules: DefaultRules()}); err != nil {
+		t.Fatal(err)
+	}
+	var orphan int
+	if err := s.DB().QueryRow(`SELECT COUNT(*) FROM class WHERE counselor_id IS NULL`).Scan(&orphan); err != nil {
+		t.Fatal(err)
+	}
+	if orphan != 0 {
+		t.Fatalf("%d 个班级没有辅导员", orphan)
+	}
+	var linked int
+	if err := s.DB().QueryRow(`SELECT COUNT(*) FROM class cl JOIN counselor co ON co.id = cl.counselor_id`).Scan(&linked); err != nil {
+		t.Fatal(err)
+	}
+	var total int
+	if err := s.DB().QueryRow(`SELECT COUNT(*) FROM class`).Scan(&total); err != nil {
+		t.Fatal(err)
+	}
+	if linked != total {
+		t.Fatalf("%d/%d 个班级的辅导员外键失效", total-linked, total)
+	}
+}

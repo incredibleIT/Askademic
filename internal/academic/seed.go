@@ -131,7 +131,8 @@ func Seed(ctx context.Context, s *Store, opts SeedOptions) error {
 		teacherIDs = append(teacherIDs, id)
 	}
 	// 每班一位辅导员（8 位），回填 class.counselor_id。
-	for cid := range classIDs {
+	// 注意遍历的是 map 的 value（class 表 id），key 是班名。
+	for _, cid := range classIDs {
 		counselorSeq++
 		name := seedSurnames[(int(counselorSeq)*7)%len(seedSurnames)] + "老师"
 		if _, err := db.ExecContext(ctx, `INSERT INTO counselor(id, staff_no, name, department_id) VALUES(?, ?, ?, 1)`,
