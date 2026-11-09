@@ -49,7 +49,7 @@ func (t *AcademicDBTool) Description() string {
 		"学生可用 my_profile(本人档案)、my_grades(本人成绩)、my_enrollments(本人选课)、my_credits(学分进度)；" +
 		"教师可用 my_teaching_classes(所带教学班)、class_grades(所带班成绩)、class_roster(名单)、class_stats(统计)；" +
 		"辅导员可用 counselor_classes(所带班级)、class_roster、class_stats；" +
-		"教务管理员可用 students_all(全校学生)等全量表。只支持 SELECT/WITH 只读查询。"
+		"教务管理员可用 students_all(全校学生)、grades_all(全校成绩明细)、class_roster(名单)、class_stats(统计)。只支持 SELECT/WITH 只读查询。"
 }
 
 // Parameters 实现 types.Tool。

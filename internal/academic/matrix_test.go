@@ -49,6 +49,7 @@ func TestPermissionMatrix(t *testing.T) {
 		{"辅导员看所带统计", "cou", `SELECT * FROM class_stats`, true},
 		{"辅导员看全校汇总", "cou", `SELECT * FROM students_all`, false},
 		{"教务看全量学生", "adm", `SELECT * FROM students_all`, true},
+		{"教务看全量成绩明细", "adm", `SELECT * FROM grades_all`, true},
 		{"教务看班级统计", "adm", `SELECT * FROM class_stats`, true},
 	}
 

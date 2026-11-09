@@ -21,6 +21,7 @@ const (
 	TblClassStats        = "class_stats"
 	TblCounselorClasses  = "counselor_classes"
 	TblStudentsAll       = "students_all"
+	TblGradesAll         = "grades_all"
 )
 
 // QueryOptions 控制单次查询的资源上限。
@@ -56,7 +57,7 @@ func AvailableTables(id Identity) []string {
 	case RoleCounselor:
 		return []string{TblCounselorClasses, TblClassRoster, TblClassStats}
 	case RoleAdmin:
-		return []string{TblStudentsAll, TblClassRoster, TblClassStats}
+		return []string{TblStudentsAll, TblGradesAll, TblClassRoster, TblClassStats}
 	default:
 		return nil
 	}
@@ -269,6 +270,17 @@ func materialize(ctx context.Context, mem *sql.DB, id Identity) error {
 	case RoleAdmin:
 		stmts = []stmt{
 			{`CREATE TABLE students_all AS SELECT * FROM src.student`},
+			// 全量成绩明细（§7.2 all_*）：逐课分数与绩点，教务处排榜/审核用
+			{`CREATE TABLE grades_all AS
+			  SELECT st.student_no, st.name AS student_name, cl.name AS class_name,
+			         co.name AS course_name, co.credits, tc.term,
+			         g.usual_score, g.final_score, g.total_score, g.gpa, g.is_retake
+			  FROM src.grade g
+			  JOIN src.enrollment e ON e.id = g.enrollment_id
+			  JOIN src.student st ON st.id = e.student_id
+			  JOIN src.class cl ON cl.id = st.class_id
+			  JOIN src.teaching_class tc ON tc.id = e.teaching_class_id
+			  JOIN src.course co ON co.id = tc.course_id`},
 			{`CREATE TABLE class_roster AS
 			  SELECT cl.name AS class_name, st.student_no, st.name AS student_name, st.status,
 			         st.weighted_gpa, st.earned_credits
