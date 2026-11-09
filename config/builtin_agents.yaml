@@ -335,3 +335,53 @@ builtin_agents:
       vector_threshold: 0.5
       rerank_top_k: 10
       rerank_threshold: 0.3
+
+  # 学业助手：面向学生的教务数据问答。academic_db 工具只暴露按角色物化的
+  # 视图（my_grades / class_stats 等），物理表对模型不可见。
+  - id: "academic-assistant"
+    avatar: "🎓"
+    is_builtin: true
+    i18n:
+      default:
+        name: "Academic Assistant"
+        description: "Campus academic assistant: query your own grades, credits and class data with citations"
+      zh-CN:
+        name: "学业助手"
+        description: "校园学业助手：查询你的成绩、学分与班级数据，回答有据可查"
+      zh-TW:
+        name: "學業助手"
+        description: "校園學業助手：查詢你的成績、學分與班級數據，回答有據可查"
+      ja-JP:
+        name: "学业アシスタント"
+        description: "学業アシスタント：自分の成績・単位・クラスデータを照会し、出典付きで回答"
+      ko-KR:
+        name: "학업 어시스턴트"
+        description: "학업 어시스턴트: 본인의 성적, 학점, 반 데이터를 조회하고 출처와 함께 답변"
+    config:
+      agent_mode: "smart-reasoning"
+      agent_type: "rag-qa"
+      system_prompt: ""
+      temperature: 0.3
+      max_completion_tokens: 0
+      max_iterations: 50
+      kb_selection_mode: "all"
+      retrieve_kb_only_when_mentioned: false
+      allowed_tools:
+        - "search_knowledge"
+        - "read_document"
+        - "list_documents"
+        - "query_knowledge_graph"
+        - "ask_user"
+        - "academic_db"
+      web_search_enabled: false
+      web_search_max_results: 0
+      reflection_enabled: false
+      multi_turn_enabled: true
+      faq_priority_enabled: true
+      faq_direct_answer_threshold: 0.9
+      faq_score_boost: 1.2
+      embedding_top_k: 10
+      keyword_threshold: 0.3
+      vector_threshold: 0.5
+      rerank_top_k: 10
+      rerank_threshold: 0.3
