@@ -159,7 +159,7 @@
 
       <!-- 左列：产品切片（data-ui）。能力随真实数据逐步接入：
            第一期后端落地后，这里升级为真实问候 + 今日课表 + 带出处的回答切片；
-           当前只陈述产品定义（来自 docs/superpowers/specs），不展示伪造数据。 -->
+           当前只陈述产品定义，不展示伪造数据。 -->
       <div class="sheet" data-ui aria-label="Askademic 产品预览">
         <div class="mini-brand">
           <BrandWordmark :height="18" />
