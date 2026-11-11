@@ -29,7 +29,15 @@ def get_model():
     global _model, _dim
     if _model is None:
         from fastembed import TextEmbedding
-        _model = TextEmbedding(model_name=MODEL)
+        # 本地模型目录优先（环境变量 EMBED_LOCAL_MODEL 指向含 model_optimized.onnx
+        # 的目录）：离线加载，跳过 fastembed 的远端校验（hf-mirror 限流时缓存
+        # 校验失败会导致整个服务起不来）。缺省仍走 fastembed 缓存/下载。
+        local = os.environ.get("EMBED_LOCAL_MODEL", "")
+        if local and os.path.isdir(local):
+            print(f"[embedding-server] loading local model from {local}", flush=True)
+            _model = TextEmbedding(model_name=MODEL, local_model_files=local)
+        else:
+            _model = TextEmbedding(model_name=MODEL)
         _dim = len(next(iter(_model.embed(["probe"]))))
         print(f"[embedding-server] model ready: {MODEL} dim={_dim}", flush=True)
     return _model
